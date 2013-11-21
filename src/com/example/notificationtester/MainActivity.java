@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 import android.view.View;
 import android.widget.TextView;
@@ -63,11 +64,11 @@ public class MainActivity extends Activity {
     public void goSettings(){
     	Intent intent;
     	if (Build.VERSION.SDK_INT < 18){
-    		intent = new Intent("android.settings.ACTION_ACCESSIBILITY_SETTINGS");
+    		startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
     	} else {
     		intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
+    		startActivity(intent);
     	}
-    	startActivity(intent);
     }
 
     class NotificationReceiver extends BroadcastReceiver{
