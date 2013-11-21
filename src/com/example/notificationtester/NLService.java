@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Handler;
 import android.os.Parcelable;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
@@ -21,6 +22,7 @@ public class NLService extends NotificationListenerService {
 
     private String TAG = this.getClass().getSimpleName();
     private NLServiceReceiver nlservicereciver;
+    private Handler mHandler;
     @Override
     public void onCreate() {
         super.onCreate();
@@ -47,6 +49,8 @@ public class NLService extends NotificationListenerService {
         i.putExtra("notification_event","onNotificationPosted :" + sbn.getPackageName() + "\n");
         sendBroadcast(i);
         notificationCapture(sbn);
+        
+        mHandler = new Handler();
     }
 
     @Override

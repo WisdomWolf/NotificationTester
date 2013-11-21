@@ -1,6 +1,7 @@
 package com.example.notificationtester;
 
 import android.accessibilityservice.AccessibilityService;
+import android.accessibilityservice.AccessibilityServiceInfo;
 import android.annotation.TargetApi;
 import android.app.Notification;
 import android.content.Context;
@@ -8,6 +9,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Build;
+import android.os.Handler;
 import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +18,10 @@ import android.view.accessibility.AccessibilityEvent;
 import android.widget.RemoteViews;
 import android.widget.TextView;
 
+
 public class AccessService extends AccessibilityService {
+	private Handler mHandler;
+	
 	public void onAccessibilityEvent(AccessibilityEvent event) {
 		PackageManager pm = getPackageManager();
 		String eventPackageName;
@@ -73,6 +78,17 @@ public class AccessService extends AccessibilityService {
             return "";
         }
     }
+	
+	 @Override
+	    protected void onServiceConnected() {
+	        AccessibilityServiceInfo info = new AccessibilityServiceInfo();
+	        info.feedbackType = AccessibilityServiceInfo.FEEDBACK_VISUAL;
+	        info.eventTypes = AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED;
+	        info.notificationTimeout = 100;
+	        setServiceInfo(info);
+
+	        mHandler = new Handler();
+	    }
     
     @TargetApi(18)
     private String getExtraBigData(Notification notification, String existing_text) {
