@@ -47,6 +47,9 @@ public class NLService extends NotificationListenerService {
         Log.i(TAG,"Intent:" + " " + sbn.getNotification().contentIntent.toString());
         Intent i = new  Intent("com.example.notificationlistener.NOTIFICATION_LISTENER_EXAMPLE");
         i.putExtra("notification_event","onNotificationPosted :" + sbn.getPackageName() + "\n");
+        String notificationText = notificationCapture(sbn);
+    	i.putExtra("notification_event"," " + sbn.getPackageName() + "\n" 
+    			+ notificationText + "\n");
         sendBroadcast(i);
     }
 
@@ -59,15 +62,16 @@ public class NLService extends NotificationListenerService {
         sendBroadcast(i);
     }
     
-    public void notificationCapture(StatusBarNotification sbn){
+    public String notificationCapture(StatusBarNotification sbn){
     	Log.i(TAG,"********* notificationCapture");
-    	Intent i = new  Intent("com.example.notificationlistener.NOTIFICATION_LISTENER_EXAMPLE");
+    	//Intent i = new  Intent("com.example.notificationlistener.NOTIFICATION_LISTENER_EXAMPLE");
     	String notificationText = "";
     	Parcelable parcelable = sbn.getNotification();
     	notificationText += "\n" + getExtraBigData((Notification) parcelable, notificationText.trim());
-    	i.putExtra("notification_event"," " + sbn.getPackageName() + "\n" 
-    			+ notificationText + "\n");
-    	sendBroadcast(i);
+    	//i.putExtra("notification_event"," " + sbn.getPackageName() + "\n" 
+    	//		+ notificationText + "\n");
+    	//sendBroadcast(i);
+    	return notificationText;
    }
     private String getExtraData(Notification notification, String existing_text) {
     	Log.i(TAG,"******** getExtraData");
@@ -160,11 +164,15 @@ public class NLService extends NotificationListenerService {
                 i1.putExtra("notification_event","=====================");
                 sendBroadcast(i1);
                 for (StatusBarNotification sbn : NLService.this.getActiveNotifications()) {
-                   notificationCapture(sbn);
+                	Intent i2 = new  Intent("com.example.notificationlistener.NOTIFICATION_LISTENER_EXAMPLE");
+                	String notificationText = notificationCapture(sbn);
+                	i2.putExtra("notification_event"," " + sbn.getPackageName() + "\n" 
+                			+ notificationText + "\n");
+                	sendBroadcast(i2);
                 }
-                Intent i2 = new  Intent("com.example.notificationlistener.NOTIFICATION_LISTENER_EXAMPLE");
-                i2.putExtra("notification_event","===== Notification List ====");
-                sendBroadcast(i2);
+                Intent i3 = new  Intent("com.example.notificationlistener.NOTIFICATION_LISTENER_EXAMPLE");
+                i3.putExtra("notification_event","===== Notification List ====");
+                sendBroadcast(i3);
 
             }
 
