@@ -48,9 +48,6 @@ public class NLService extends NotificationListenerService {
         Intent i = new  Intent("com.example.notificationlistener.NOTIFICATION_LISTENER_EXAMPLE");
         i.putExtra("notification_event","onNotificationPosted :" + sbn.getPackageName() + "\n");
         sendBroadcast(i);
-        notificationCapture(sbn);
-        
-        mHandler = new Handler();
     }
 
     @Override
