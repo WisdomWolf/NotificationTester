@@ -49,7 +49,7 @@ public class NLService extends NotificationListenerService {
         i.putExtra("notification_event","onNotificationPosted :" + sbn.getPackageName() + "\n");
         //String notificationText = notificationCapture(sbn);
     	//i.putExtra("notification_event"," " + sbn.getPackageName() + "\n" 
-    			+ notificationText + "\n");
+    	//		+ notificationText + "\n");
         sendBroadcast(i);
     }
 
