@@ -6,7 +6,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Handler;
 import android.os.Parcelable;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
@@ -46,11 +45,11 @@ public class NLService extends NotificationListenerService {
         Log.i(TAG,"Notification String:" + sbn.toString());
         Log.i(TAG,"Intent:" + " " + sbn.getNotification().contentIntent.toString());
         Intent i = new  Intent("com.example.notificationlistener.NOTIFICATION_LISTENER_EXAMPLE");
-        i.putExtra("notification_event","onNotificationPosted :" + sbn.getPackageName() + "\n");
-        //String notificationText = notificationCapture(sbn);
-    	//i.putExtra("notification_event"," " + sbn.getPackageName() + "\n" 
-    	//		+ notificationText + "\n");
+        i.putExtra("notification_event","onNotificationPosted :" + sbn.getPackageName() + "\n");	
         sendBroadcast(i);
+        Intent i2 = new  Intent("com.example.notificationlistener.NOTIFICATION_LISTENER_EXAMPLE");
+        i2.putExtra("command", "list");
+        sendBroadcast(i2);
     }
 
     @Override
