@@ -22,7 +22,7 @@ public class NLService extends NotificationListenerService {
 
     private String TAG = this.getClass().getSimpleName();
     private NLServiceReceiver nlservicereciver;
-    private Handler mHandler;
+	
     @Override
     public void onCreate() {
         super.onCreate();
@@ -47,8 +47,8 @@ public class NLService extends NotificationListenerService {
         Log.i(TAG,"Intent:" + " " + sbn.getNotification().contentIntent.toString());
         Intent i = new  Intent("com.example.notificationlistener.NOTIFICATION_LISTENER_EXAMPLE");
         i.putExtra("notification_event","onNotificationPosted :" + sbn.getPackageName() + "\n");
-        String notificationText = notificationCapture(sbn);
-    	i.putExtra("notification_event"," " + sbn.getPackageName() + "\n" 
+        //String notificationText = notificationCapture(sbn);
+    	//i.putExtra("notification_event"," " + sbn.getPackageName() + "\n" 
     			+ notificationText + "\n");
         sendBroadcast(i);
     }
