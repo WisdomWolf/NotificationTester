@@ -64,9 +64,11 @@ public class NLService extends NotificationListenerService {
     
     public String notificationCapture(StatusBarNotification sbn){
     	Log.i(TAG,"********* notificationCapture");
+    	Log.i(TAG,"Notification String:" + sbn.toString());
     	//Intent i = new  Intent("com.example.notificationlistener.NOTIFICATION_LISTENER_EXAMPLE");
     	String notificationText = "";
     	Parcelable parcelable = sbn.getNotification();
+    	Log.i(TAG,"Parcel:" + parcelable.toString());
     	notificationText += "\n" + getExtraBigData((Notification) parcelable, notificationText.trim());
     	//i.putExtra("notification_event"," " + sbn.getPackageName() + "\n" 
     	//		+ notificationText + "\n");
@@ -104,6 +106,7 @@ public class NLService extends NotificationListenerService {
         if (views == null) {
             return getExtraData(notification, existing_text);
         }
+        Log.d(TAG,"Big Content:" + notification.bigContentView.toString());
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         try {
             ViewGroup localView = (ViewGroup) inflater.inflate(views.getLayoutId(), null);
@@ -128,6 +131,7 @@ public class NLService extends NotificationListenerService {
 
             if (v instanceof TextView) {
                 TextView tv = (TextView) v;
+                Log.d(TAG,"TextView:" + tv.getText().toString());
                 if (tv.getText().toString() == "..."
                         || isInteger(tv.getText().toString())
                         || tv.getText().toString().trim().equalsIgnoreCase(existing_text)) {
