@@ -49,12 +49,12 @@ public class MainActivity extends Activity {
 
         if(v.getId() == R.id.btnCreateNotify){
             NotificationManager nManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-            NotificationCompat.Builder ncomp = new NotificationCompat.Builder(this);
-            ncomp.setContentTitle("WisdomWorks");
-            ncomp.setContentText("Notification Listener Service Example");
-            ncomp.setTicker("Wisdom is wise, but this is crazy.");
-            ncomp.setSmallIcon(R.drawable.ic_launcher);
-            ncomp.setAutoCancel(true);
+            NotificationCompat.Builder ncomp = new NotificationCompat.Builder(this)
+            .setContentTitle("WisdomWorks")
+            .setContentText("Notification Listener Service Example")
+            .setTicker("Wisdom is wise, but this is crazy.")
+            .setSmallIcon(R.drawable.ic_launcher)
+            .setAutoCancel(true);
             nManager.notify((int)System.currentTimeMillis(),ncomp.build());
         }
         else if(v.getId() == R.id.btnEnableService){
