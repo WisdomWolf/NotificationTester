@@ -18,6 +18,7 @@ import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 public class MainActivity extends Activity {
@@ -38,6 +39,10 @@ public class MainActivity extends Activity {
         registerReceiver(nReceiver,filter);
 		buildText = (TextView) findViewById(R.id.txtViewB);
 		getBuildTime();
+		if (Build.VERSION.SDK_INT < 18){
+			Button btn = (Button) findViewById(R.id.btnListNotify);
+			btn.setEnabled(false);
+		}
     }
 
     @Override

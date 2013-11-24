@@ -31,12 +31,12 @@
 		android:text="Enable Service"/>
 
 	<ScrollView
-		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		android:layout_alignParentBottom="true"
-		android:layout_alignRight="@+id/btnListNotify"
-		android:layout_below="@id/txtViewB"
-		android:layout_alignLeft="@+id/btnListNotify">
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:layout_alignLeft="@+id/btnListNotify"
+	    android:layout_alignParentBottom="true"
+	    android:layout_alignRight="@+id/btnListNotify"
+	    android:layout_below="@id/btnListNotify" >
 
 		<TextView
 			android:layout_width="match_parent"
@@ -58,13 +58,13 @@
 		android:layout_alignRight="@+id/btnEnableService"/>
 
 	<TextView
-		android:layout_height="wrap_content"
-		android:text="Small Text"
-		android:textAppearance="?android:attr/textAppearanceSmall"
-		android:layout_width="wrap_content"
-		android:id="@+id/txtViewB"
-		android:layout_below="@id/btnListNotify"
-		android:layout_alignRight="@id/btnListNotify"/>
+	    android:id="@+id/txtViewB"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentBottom="true"
+	    android:layout_alignParentRight="true"
+	    android:text="Small Text"
+	    android:textAppearance="?android:attr/textAppearanceSmall" />
 
 </RelativeLayout>
 
