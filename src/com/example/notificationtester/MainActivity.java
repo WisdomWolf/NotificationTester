@@ -34,6 +34,7 @@ public class MainActivity extends Activity {
         filter.addAction("com.example.notificationlistener.NOTIFICATION_LISTENER_EXAMPLE");
         registerReceiver(nReceiver,filter);
 		buildText = (TextView) findViewById(R.id.txtViewB);
+		getBuildTime();
     }
 
     @Override
