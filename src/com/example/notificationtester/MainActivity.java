@@ -1,11 +1,16 @@
 package com.example.notificationtester;
 
+import java.text.SimpleDateFormat;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+
 import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.ApplicationInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -17,6 +22,7 @@ public class MainActivity extends Activity {
 
     private TextView txtView;
     private NotificationReceiver nReceiver;
+    private TextView buildText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +33,7 @@ public class MainActivity extends Activity {
         IntentFilter filter = new IntentFilter();
         filter.addAction("com.example.notificationlistener.NOTIFICATION_LISTENER_EXAMPLE");
         registerReceiver(nReceiver,filter);
+		buildText = (TextView) findViewById(R.id.txtViewB);
     }
 
     @Override
@@ -70,6 +77,19 @@ public class MainActivity extends Activity {
     		startActivity(intent);
     	}
     }
+	
+	private void getBuildTime(){
+		try{
+			ApplicationInfo ai = getPackageManager().getApplicationInfo(getPackageName(), 0);
+			ZipFile zf = new ZipFile(ai.sourceDir);
+			ZipEntry ze = zf.getEntry("classes.dex");
+			long time = ze.getTime();
+			String s = SimpleDateFormat.getInstance().format(new java.util.Date(time));
+			buildText.setText(s);
+		}catch(Exception e){
+			buildText.setText("error");
+		}
+	}
 
     class NotificationReceiver extends BroadcastReceiver{
 
