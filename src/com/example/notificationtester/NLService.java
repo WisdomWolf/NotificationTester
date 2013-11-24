@@ -70,8 +70,9 @@ public class NLService extends NotificationListenerService {
     public void notificationCapture(StatusBarNotification sbn){
     	Log.i(TAG,"********* notificationCapture");
     	Intent i = new  Intent("com.example.notificationlistener.NOTIFICATION_LISTENER_EXAMPLE");
-    	String notificationText = sbn.getNotification().tickerText.toString();
-    	Parcelable parcelable = sbn.getNotification();
+    	//String notificationText = sbn.getNotification().tickerText.toString();
+    	String notificationText = "";
+		Parcelable parcelable = sbn.getNotification();
     	notificationText += "\n" + getExtraBigData((Notification) parcelable, notificationText.trim());
     	i.putExtra("notification_event"," " + sbn.getPackageName() + "\n" 
     			+ notificationText + "\n");
