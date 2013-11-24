@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.os.Looper;
 import android.os.Parcelable;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
@@ -43,6 +44,7 @@ public class NLService extends NotificationListenerService {
     @Override
     public void onNotificationPosted(StatusBarNotification sbn) {
     	
+    	Looper.prepare();
         Log.i(TAG,"**********  onNotificationPosted");
         Log.i(TAG,"ID :" + sbn.getId() + "\t" + sbn.getNotification().tickerText + "\t" + sbn.getPackageName());
         Log.i(TAG,"Notification String:" + sbn.toString());
@@ -52,6 +54,7 @@ public class NLService extends NotificationListenerService {
         //additional debugging
         sendBroadcast(i);
         notificationCapture(sbn);
+        Looper.loop();
     }
 
     @Override
@@ -67,7 +70,7 @@ public class NLService extends NotificationListenerService {
     public void notificationCapture(StatusBarNotification sbn){
     	Log.i(TAG,"********* notificationCapture");
     	Intent i = new  Intent("com.example.notificationlistener.NOTIFICATION_LISTENER_EXAMPLE");
-    	String notificationText = "";
+    	String notificationText = sbn.getNotification().tickerText.toString();
     	Parcelable parcelable = sbn.getNotification();
     	notificationText += "\n" + getExtraBigData((Notification) parcelable, notificationText.trim());
     	i.putExtra("notification_event"," " + sbn.getPackageName() + "\n" 
