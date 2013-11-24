@@ -6,6 +6,7 @@ import java.util.zip.ZipFile;
 
 import android.app.Activity;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +16,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.view.View;
 import android.widget.TextView;
 
@@ -23,6 +25,7 @@ public class MainActivity extends Activity {
     private TextView txtView;
     private NotificationReceiver nReceiver;
     private TextView buildText;
+    private int mId = 1337;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +58,16 @@ public class MainActivity extends Activity {
             .setTicker("Wisdom is wise, but this is crazy.")
             .setSmallIcon(R.drawable.ic_launcher)
             .setAutoCancel(true);
-            nManager.notify((int)System.currentTimeMillis(),ncomp.build());
+            TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+            Intent resultIntent = new Intent(this, MainActivity.class);
+            stackBuilder.addParentStack(MainActivity.class);
+            stackBuilder.addNextIntent(resultIntent);
+            PendingIntent resultPendingIntent = 
+            		stackBuilder.getPendingIntent(
+            		0,
+            		PendingIntent.FLAG_UPDATE_CURRENT
+            		);
+            nManager.notify(mId,ncomp.build());
         }
         else if(v.getId() == R.id.btnEnableService){
             goSettings();
