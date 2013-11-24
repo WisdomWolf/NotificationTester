@@ -50,14 +50,8 @@ public class NLService extends NotificationListenerService {
         Intent i = new  Intent("com.example.notificationlistener.NOTIFICATION_LISTENER_EXAMPLE");
         i.putExtra("notification_event","onNotificationPosted :" + sbn.getPackageName() + "\n");
         //additional debugging
-        Parcelable parcel = sbn.getNotification();
-        Notification notification = (Notification) parcel;
-        RemoteViews views = notification.contentView;
-        i.putExtra("notification_event","contentview:" + views.toString());
-        Log.i(TAG,"contentview:" + views.toString());
-        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        Log.i(TAG,"inflated:" + inflater.toString());
         sendBroadcast(i);
+        notificationCapture(sbn);
     }
 
     @Override
