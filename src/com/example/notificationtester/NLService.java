@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Handler;
+import android.os.HandlerThread;
 import android.os.Parcelable;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
@@ -25,6 +26,7 @@ public class NLService extends NotificationListenerService {
     private Handler mHandler;
     @Override
     public void onCreate() {
+    	mHandler = new Handler();
         super.onCreate();
         nlservicereciver = new NLServiceReceiver();
         IntentFilter filter = new IntentFilter();
@@ -40,13 +42,21 @@ public class NLService extends NotificationListenerService {
 
     @Override
     public void onNotificationPosted(StatusBarNotification sbn) {
-
+    	
         Log.i(TAG,"**********  onNotificationPosted");
         Log.i(TAG,"ID :" + sbn.getId() + "\t" + sbn.getNotification().tickerText + "\t" + sbn.getPackageName());
         Log.i(TAG,"Notification String:" + sbn.toString());
-        Log.i(TAG,"Intent:" + " " + sbn.getNotification().contentIntent.toString());
+        //Log.i(TAG,"Intent:" + " " + sbn.getNotification().contentIntent.toString());
         Intent i = new  Intent("com.example.notificationlistener.NOTIFICATION_LISTENER_EXAMPLE");
         i.putExtra("notification_event","onNotificationPosted :" + sbn.getPackageName() + "\n");
+        //additional debugging
+        Parcelable parcel = sbn.getNotification();
+        Notification notification = (Notification) parcel;
+        RemoteViews views = notification.contentView;
+        i.putExtra("notification_event","contentview:" + views.toString());
+        Log.i(TAG,"contentview:" + views.toString());
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        Log.i(TAG,"inflated:" + inflater.toString());
         sendBroadcast(i);
     }
 
@@ -57,6 +67,7 @@ public class NLService extends NotificationListenerService {
         Intent i = new  Intent("com.example.notificationlistener.NOTIFICATION_LISTENER_EXAMPLE");
         i.putExtra("notification_event","onNotificationRemoved :" + sbn.getPackageName() + "\n");
         sendBroadcast(i);
+        
     }
     
     public void notificationCapture(StatusBarNotification sbn){
