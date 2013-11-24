@@ -64,9 +64,10 @@ public class MainActivity extends Activity {
             stackBuilder.addNextIntent(resultIntent);
             PendingIntent resultPendingIntent = 
             		stackBuilder.getPendingIntent(
-            		0,
-            		PendingIntent.FLAG_UPDATE_CURRENT
+            				0,
+            				PendingIntent.FLAG_UPDATE_CURRENT
             		);
+            ncomp.setContentIntent(resultPendingIntent);
             nManager.notify(mId,ncomp.build());
         }
         else if(v.getId() == R.id.btnEnableService){
