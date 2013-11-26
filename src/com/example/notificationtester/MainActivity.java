@@ -62,7 +62,7 @@ public class MainActivity extends Activity {
             .setContentText("Notification Listener Service Example")
             .setTicker("Wisdom is wise, but this is crazy.")
             .setSmallIcon(R.drawable.ic_launcher)
-            .setAutoCancel(true);
+            .setAutoCancel(false); //want to leave it in status bar for easy way back
             TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
             Intent resultIntent = new Intent(this, MainActivity.class);
             stackBuilder.addParentStack(MainActivity.class);
@@ -87,6 +87,7 @@ public class MainActivity extends Activity {
 
     }
     
+    //will bring them to appropriate settings menu to enable our service
     public void goSettings(){
     	Intent intent;
     	if (Build.VERSION.SDK_INT < 18){
@@ -97,6 +98,7 @@ public class MainActivity extends Activity {
     	}
     }
 	
+    //used to get and set the text at bottom for easy revision identification
 	private void getBuildTime(){
 		try{
 			ApplicationInfo ai = getPackageManager().getApplicationInfo(getPackageName(), 0);
