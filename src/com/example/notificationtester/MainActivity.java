@@ -1,20 +1,40 @@
 package com.example.notificationtester;
 
-import android.annotation.*;
-import android.app.*;
-import android.content.*;
-import android.os.*;
-import android.provider.*;
-import android.support.v4.app.*;
-import android.util.*;
-import android.view.*;
-import android.widget.*;
+import java.text.SimpleDateFormat;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+
+import android.annotation.TargetApi;
+import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.ApplicationInfo;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.Parcelable;
+import android.provider.Settings;
+import android.support.v4.app.NotificationCompat;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.RemoteViews;
+import android.widget.TextView;
 
 public class MainActivity extends Activity {
 
-    private TextView txtView;
+	private TextView txtView;
     private NotificationReceiver nReceiver;
-	private String TAG = this.getClass().getSimpleName();
+    private TextView buildText;
+    private int mId = 1337;
+    private String TAG = this.getClass().getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +45,12 @@ public class MainActivity extends Activity {
         IntentFilter filter = new IntentFilter();
         filter.addAction("com.example.notificationlistener.NOTIFICATION_LISTENER_EXAMPLE");
         registerReceiver(nReceiver,filter);
+		buildText = (TextView) findViewById(R.id.txtViewB);
+		getBuildTime();
+		if (Build.VERSION.SDK_INT < 18){
+			Button btn = (Button) findViewById(R.id.btnListNotify);
+			btn.setEnabled(false);
+		}
     }
 
     @Override
@@ -39,13 +65,23 @@ public class MainActivity extends Activity {
 
         if(v.getId() == R.id.btnCreateNotify){
             NotificationManager nManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-            NotificationCompat.Builder ncomp = new NotificationCompat.Builder(this);
-            ncomp.setContentTitle("WisdomWorks");
-            ncomp.setContentText("Notification Listener Service Example");
-            ncomp.setTicker("Wisdom is wise, but this is crazy.");
-            ncomp.setSmallIcon(R.drawable.ic_launcher);
-            ncomp.setAutoCancel(true);
-            nManager.notify((int)System.currentTimeMillis(),ncomp.build());
+            NotificationCompat.Builder ncomp = new NotificationCompat.Builder(this)
+            .setContentTitle("WisdomWorks")
+            .setContentText("Notification Listener Service Example")
+            .setTicker("Wisdom is wise, but this is crazy.")
+            .setSmallIcon(R.drawable.ic_launcher)
+            .setAutoCancel(false); //want to leave it in status bar for easy way back
+            TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+            Intent resultIntent = new Intent(this, MainActivity.class);
+            stackBuilder.addParentStack(MainActivity.class);
+            stackBuilder.addNextIntent(resultIntent);
+            PendingIntent resultPendingIntent = 
+            		stackBuilder.getPendingIntent(
+            				0,
+            				PendingIntent.FLAG_UPDATE_CURRENT
+            		);
+            ncomp.setContentIntent(resultPendingIntent);
+            nManager.notify(mId,ncomp.build());
         }
         else if(v.getId() == R.id.btnEnableService){
             goSettings();
@@ -59,6 +95,7 @@ public class MainActivity extends Activity {
 
     }
     
+    //will bring them to appropriate settings menu to enable our service
     public void goSettings(){
     	Intent intent;
     	if (Build.VERSION.SDK_INT < 18){
@@ -68,6 +105,20 @@ public class MainActivity extends Activity {
     		startActivity(intent);
     	}
     }
+	
+    //used to get and set the text at bottom for easy revision identification
+	private void getBuildTime(){
+		try{
+			ApplicationInfo ai = getPackageManager().getApplicationInfo(getPackageName(), 0);
+			ZipFile zf = new ZipFile(ai.sourceDir);
+			ZipEntry ze = zf.getEntry("classes.dex");
+			long time = ze.getTime();
+			String s = SimpleDateFormat.getInstance().format(new java.util.Date(time));
+			buildText.setText(s);
+		}catch(Exception e){
+			buildText.setText("error");
+		}
+	}
 
     class NotificationReceiver extends BroadcastReceiver{
 

@@ -1,23 +1,14 @@
 package com.example.notificationtester;
 
 import android.annotation.TargetApi;
-import android.app.Notification;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Handler;
-import android.os.HandlerThread;
-import android.os.Looper;
 import android.os.Parcelable;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.RemoteViews;
-import android.widget.TextView;
 
 @TargetApi(18)
 public class NLService extends NotificationListenerService {
