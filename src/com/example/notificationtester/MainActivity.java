@@ -73,7 +73,8 @@ public class MainActivity extends Activity {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            String notificationText = intent.getStringExtra("notification_event") + "\n" + txtView.getText();
+            String eventText = intent.getStringExtra("notification_event") + "\n" + txtView.getText();
+        	String notificationText = intent.getStringExtra("notification_text") + "\n" + txtView.getText();
 			Parcelable parcel = intent.getParcelableExtra("statusbar_notification_object");
 			if (parcel instanceof Notification) {
 				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
@@ -83,7 +84,17 @@ public class MainActivity extends Activity {
 				}
 
 			}
-			txtView.setText(notificationText);
+			if (eventText == null || eventText == ""){
+				Log.d(TAG,"eventText empty");
+			} else {
+				txtView.setText(eventText);
+			}
+			if (notificationText == null || notificationText == ""){
+				Log.d(TAG,"notificationText empty");
+			} else {
+				txtView.setText(notificationText);
+			}
+		
         }
 		
 		private String getExtraData(Notification notification, String existing_text) {

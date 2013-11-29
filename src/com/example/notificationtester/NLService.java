@@ -72,7 +72,7 @@ public class NLService extends NotificationListenerService {
 		}
 		Parcelable parcelable = sbn.getNotification();
     	i.putExtra("statusbar_notification_object",parcelable);
-		i.putExtra("notification_event",notificationText);
+		i.putExtra("notification_text",notificationText);
     	sendBroadcast(i);
    }
     
