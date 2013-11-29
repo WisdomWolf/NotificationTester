@@ -145,7 +145,7 @@ public class MainActivity extends Activity {
 //			} else {
 //				txtView.setText(eventText);
 //			}
-			String temp = eventText + "/n" + notificationText + "/n" + txtView.getText();
+			String temp = eventText + "\n" + notificationText + "\n" + txtView.getText();
 //			if (notificationText == null || notificationText == ""){
 //				Log.d(TAG,"notificationText empty");
 //				
