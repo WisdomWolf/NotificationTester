@@ -42,17 +42,11 @@ public class AccessService extends AccessibilityService {
         // strip the first and last characters which are [ and ]
         notificationText = notificationText.substring(1, notificationText.length() - 1);
         
-        Parcelable parcelable = event.getParcelableData();
-        if (parcelable instanceof Notification) {
-        	if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-        		notificationText += "\n" + getExtraBigData((Notification) parcelable, notificationText.trim());
-            } else {
-                notificationText += "\n" + getExtraData((Notification) parcelable, notificationText.trim());
-            }
-
-        }
+        Parcelable parcel = event.getParcelableData();
+        
         Intent i = new  Intent("com.example.notificationlistener.NOTIFICATION_LISTENER_EXAMPLE");
-        i.putExtra("notification_event", notificationText);
+        i.putExtra("statusbar_notification_object", parcel);
+		i.putExtra("notification_event",notificationText);
         sendBroadcast(i);
             
 	}
