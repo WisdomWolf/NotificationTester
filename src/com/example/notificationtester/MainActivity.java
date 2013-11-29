@@ -124,27 +124,34 @@ public class MainActivity extends Activity {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            String eventText = intent.getStringExtra("notification_event") + "\n" + txtView.getText();
-        	String notificationText = intent.getStringExtra("notification_text") + "\n" + txtView.getText();
-			Parcelable parcel = intent.getParcelableExtra("statusbar_notification_object");
-			if (parcel instanceof Notification) {
-				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-					notificationText += "\n" + getExtraBigData((Notification) parcel, notificationText.trim());
-				} else {
-					notificationText += "\n" + getExtraData((Notification) parcel, notificationText.trim());
+            String eventText = intent.getStringExtra("notification_event");
+			Log.d(TAG,"*******Received notification_event " + eventText);
+        	String notificationText = intent.getStringExtra("notification_text");
+			Log.d(TAG,"*******Received notification_text " + notificationText);
+			if (intent.getParcelableExtra("statusbar_notification_object") != null){
+				Parcelable parcel = intent.getParcelableExtra("statusbar_notification_object");
+				if (parcel instanceof Notification) {
+					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+						notificationText += "\n" + getExtraBigData((Notification) parcel, notificationText.trim());
+					} else {
+						notificationText += "\n" + getExtraData((Notification) parcel, notificationText.trim());
+					}
 				}
-
 			}
-			if (eventText == null || eventText == ""){
-				Log.d(TAG,"eventText empty");
-			} else {
-				txtView.setText(eventText);
-			}
-			if (notificationText == null || notificationText == ""){
-				Log.d(TAG,"notificationText empty");
-			} else {
-				txtView.setText(notificationText);
-			}
+			//Log.d(TAG, "******Received parcel " + parcel.toString());
+			
+//			if (eventText == null || eventText == ""){
+//				Log.d(TAG,"eventText empty");
+//			} else {
+//				txtView.setText(eventText);
+//			}
+			String temp = eventText + "/n" + notificationText + "/n" + txtView.getText();
+//			if (notificationText == null || notificationText == ""){
+//				Log.d(TAG,"notificationText empty");
+//				
+//			} else {
+				txtView.setText(temp);
+			//}
 		
         }
 		

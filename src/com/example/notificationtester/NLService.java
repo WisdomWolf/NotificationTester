@@ -58,7 +58,7 @@ public class NLService extends NotificationListenerService {
     	Log.i(TAG,"********* notificationCapture");
     	Intent i = new  Intent("com.example.notificationlistener.NOTIFICATION_LISTENER_EXAMPLE");
     	String notificationText = sbn.getNotification().tickerText.toString();
-		if (notificationText == null) {
+		if (notificationText == null || notificationText == "null") {
 			notificationText = "";
 		}
 		Parcelable parcelable = sbn.getNotification();
