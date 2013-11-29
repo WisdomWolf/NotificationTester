@@ -138,20 +138,12 @@ public class MainActivity extends Activity {
 					}
 				}
 			}
-			//Log.d(TAG, "******Received parcel " + parcel.toString());
-			
-//			if (eventText == null || eventText == ""){
-//				Log.d(TAG,"eventText empty");
-//			} else {
-//				txtView.setText(eventText);
-//			}
 			String temp = eventText + "\n" + notificationText + "\n" + txtView.getText();
-//			if (notificationText == null || notificationText == ""){
-//				Log.d(TAG,"notificationText empty");
-//				
-//			} else {
+			if (temp == null || temp == "" || temp == "null"){
+				Log.d(TAG,"notificationText empty");
+			} else {
 				txtView.setText(temp);
-			//}
+			}
 		
         }
 		
