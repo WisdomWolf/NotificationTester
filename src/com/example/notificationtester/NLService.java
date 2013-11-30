@@ -38,15 +38,16 @@ public class NLService extends NotificationListenerService {
         Log.i(TAG,"Notification String:" + sbn.toString());
         //Log.i(TAG,"Intent:" + " " + sbn.getNotification().contentIntent.toString());
         Intent i = new  Intent("com.example.notificationlistener.NOTIFICATION_LISTENER_EXAMPLE");
-        i.putExtra("notification_event","onNotificationPosted :" + sbn.getPackageName() + "\n");
+        //i.putExtra("notification_event","onNotificationPosted :" + sbn.getPackageName() + "\n");
         //additional debugging
-        sendBroadcast(i);
+        //sendBroadcast(i);
         notificationCapture(sbn);
     }
 
     @Override
     public void onNotificationRemoved(StatusBarNotification sbn) {
-        Log.i(TAG,"********** onNotificationRemoved");
+        //most of what happens here is irrelevant
+    	Log.i(TAG,"********** onNotificationRemoved");
         Log.i(TAG,"ID :" + sbn.getId() + "\t" + sbn.getNotification().tickerText +"\t" + sbn.getPackageName());
         Intent i = new  Intent("com.example.notificationlistener.NOTIFICATION_LISTENER_EXAMPLE");
         i.putExtra("notification_event","onNotificationRemoved :" + sbn.getPackageName() + "\n");
@@ -57,13 +58,16 @@ public class NLService extends NotificationListenerService {
     public void notificationCapture(StatusBarNotification sbn){
     	Log.i(TAG,"********* notificationCapture");
     	Intent i = new  Intent("com.example.notificationlistener.NOTIFICATION_LISTENER_EXAMPLE");
-    	String notificationText = sbn.getNotification().tickerText.toString();
-		if (notificationText == null || notificationText == "null") {
-			notificationText = "";
-		}
+    	//String tickerText = sbn.getNotification().tickerText.toString();
+		//if (tickerText == null || tickerText.equalsIgnoreCase("null")) {
+		//	tickerText = "";
+		//}
 		Parcelable parcelable = sbn.getNotification();
+		if (parcelable == null){
+			return;
+		}
     	i.putExtra("statusbar_notification_object",parcelable);
-		i.putExtra("notification_text",notificationText);
+		//i.putExtra("ticker_text",tickerText);
     	sendBroadcast(i);
    }
     

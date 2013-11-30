@@ -124,12 +124,23 @@ public class MainActivity extends Activity {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            String eventText = intent.getStringExtra("notification_event");
-			Log.d(TAG,"*******Received notification_event " + eventText);
-        	String notificationText = intent.getStringExtra("notification_text");
-			Log.d(TAG,"*******Received notification_text " + notificationText);
+        	String eventText = "";
+        	String notificationText = "";
+        	String tickerText = "";
+        	if (intent.getStringExtra("notification_event") != null){
+        		eventText = intent.getStringExtra("notification_event");
+        		Log.d(TAG,"*******Received notification_event " + eventText);
+        	}
+        	if (intent.getStringExtra("notification_text") != null){
+        		notificationText = intent.getStringExtra("notification_text");
+        		Log.d(TAG,"*******Received notification_text " + notificationText);
+        	}
 			if (intent.getParcelableExtra("statusbar_notification_object") != null){
 				Parcelable parcel = intent.getParcelableExtra("statusbar_notification_object");
+				Notification noti = (Notification) parcel;
+				if (noti.tickerText != null){
+					tickerText = noti.tickerText.toString();
+				}
 				if (parcel instanceof Notification) {
 					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
 						notificationText += "\n" + getExtraBigData((Notification) parcel, notificationText.trim());
@@ -138,8 +149,11 @@ public class MainActivity extends Activity {
 					}
 				}
 			}
-			String temp = eventText + "\n" + notificationText + "\n" + txtView.getText();
-			if (temp == null || temp == "" || temp == "null"){
+			String temp = eventText + "\n" 
+			+ "Ticker text: " + tickerText + "\n"
+			+ "Notification text: " + notificationText + "\n" 
+			+ txtView.getText();
+			if (temp == null || temp.equals("") || temp.equals("null")){
 				Log.d(TAG,"notificationText empty");
 			} else {
 				txtView.setText(temp);
