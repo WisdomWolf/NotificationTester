@@ -52,6 +52,7 @@ public class NLService extends NotificationListenerService {
         Log.i(TAG,"ID :" + sbn.getId() + "\t" + sbn.getNotification().tickerText +"\t" + sbn.getPackageName());
         Intent i = new  Intent("com.example.notificationlistener.NOTIFICATION_LISTENER_EXAMPLE");
         i.putExtra("notification_event","onNotificationRemoved :" + sbn.getPackageName() + "\n");
+        i.putExtra("broadcasting_method", "onPosted");
         sendBroadcast(i);
         
     }
@@ -79,6 +80,7 @@ public class NLService extends NotificationListenerService {
             title = packageName;
         }
         i.putExtra("notification_title", title);
+        i.putExtra("broadcasting_method", "notificationCapture");
         Log.d(TAG,"Preparing to send broadcast.");
         try {
         	sendBroadcast(i);
@@ -99,6 +101,7 @@ public class NLService extends NotificationListenerService {
         		 if(intent.getStringExtra("command").equals("list")){
         			 Intent i1 = new  Intent("com.example.notificationlistener.NOTIFICATION_LISTENER_EXAMPLE");
         			 i1.putExtra("notification_event","=====================" + "\n" + "\n");
+        			 i1.putExtra("broadcasting_method", "NLService onReceive1");
         			 sendBroadcast(i1);
         			 for (StatusBarNotification sbn : NLService.this.getActiveNotifications()) {
         				 Log.d(TAG, "Processing Active Notification: " + sbn.getPackageName());
@@ -106,6 +109,7 @@ public class NLService extends NotificationListenerService {
         			 }
         			 Intent i2 = new  Intent("com.example.notificationlistener.NOTIFICATION_LISTENER_EXAMPLE");
         			 i2.putExtra("notification_event","===== Notification List ====" + "\n" + "\n");
+        			 i2.putExtra("broadcasting_method", "NLService onReceive2");
         			 sendBroadcast(i2);
 
         		 }

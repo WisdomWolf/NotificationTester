@@ -127,7 +127,7 @@ public class MainActivity extends Activity {
         @SuppressLint("NewApi")
 		@Override
         public void onReceive(Context context, Intent intent) {
-        	Log.d(TAG,"Broadcast received in Main Activity");
+        	Log.d(TAG,"Broadcast received in Main Activity from " + intent.getStringExtra("broadcasting_method"));
         	String eventText = "";
         	String notificationText = "";
         	String tickerText = "";

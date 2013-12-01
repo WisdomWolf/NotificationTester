@@ -48,6 +48,7 @@ public class AccessService extends AccessibilityService {
         i.putExtra("statusbar_notification_object", parcel);
 		//i.putExtra("notification_event",notificationText);
 		i.putExtra("notification_title", title);
+		i.putExtra("broadcasting_method", "onAccessibilityEvent");
         sendBroadcast(i);
             
 	}
