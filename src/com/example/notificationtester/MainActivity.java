@@ -130,7 +130,7 @@ public class MainActivity extends Activity {
         	String eventText = "";
         	String notificationText = "";
         	String tickerText = "";
-        	String pkgName = "";
+        	String titleText = "";
         	String appLabel;
         	if (intent.getStringExtra("notification_event") != null){
         		eventText = intent.getStringExtra("notification_event");
@@ -141,18 +141,16 @@ public class MainActivity extends Activity {
         				+ intent.getStringExtra("notification_text") + "\n";
         		Log.d(TAG,"*******Received notification_text " + notificationText);
         	}
+        	if (intent.getStringExtra("title_text") != null){
+        		titleText = "Title: " 
+        				+ intent.getStringExtra("title_text") + "\n";
+        	}
 			if (intent.getParcelableExtra("statusbar_notification_object") != null){
 				Parcelable parcel = intent.getParcelableExtra("statusbar_notification_object");
 				Notification noti = (Notification) parcel;
-	//			StatusBarNotification sbn = (StatusBarNotification) parcel;
 				if (noti.tickerText != null){
 					tickerText = "Ticker Text: " + noti.tickerText.toString() + "\n";
 				}
-//				if (sbn.getPackageName() != null){
-//		            pkgName = sbn.getPackageName().toString();
-//		        } else {
-//		            pkgName = "";
-//		        }
 				if (parcel instanceof Notification) {
 					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
 						notificationText += "\n" + getExtraBigData((Notification) parcel, notificationText.trim());
@@ -161,9 +159,8 @@ public class MainActivity extends Activity {
 					}
 				}
 			}
-			appLabel = getPackageLabel(pkgName);
 			String temp = eventText + "\n" 
-//					+ "Application: " + appLabel
+					+ titleText
 					+ tickerText
 					+ notificationText
 					+ txtView.getText();
@@ -174,18 +171,6 @@ public class MainActivity extends Activity {
 			}
 			//mTTS.speak(temp, TextToSpeech.QUEUE_FLUSH, null);
 		
-        }
-        
-        private String getPackageLabel(String packagename){
-            PackageManager packageManager = getPackageManager();
-            ApplicationInfo ai;
-            try {
-                ai = packageManager.getApplicationInfo(packagename, 0);
-            } catch (final NameNotFoundException e) {
-                ai = null;
-            }
-            return (String) (ai != null ? packageManager.getApplicationLabel(ai) : packagename);
-
         }
 		
 		private String getExtraData(Notification notification, String existing_text) {

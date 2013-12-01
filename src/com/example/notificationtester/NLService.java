@@ -5,6 +5,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Parcelable;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
@@ -51,6 +53,21 @@ public class NLService extends NotificationListenerService {
         Log.i(TAG,"ID :" + sbn.getId() + "\t" + sbn.getNotification().tickerText +"\t" + sbn.getPackageName());
         Intent i = new  Intent("com.example.notificationlistener.NOTIFICATION_LISTENER_EXAMPLE");
         i.putExtra("notification_event","onNotificationRemoved :" + sbn.getPackageName() + "\n");
+        PackageManager pm = getPackageManager();
+		String PackageName;
+        if (sbn.getPackageName() != null){
+            PackageName = sbn.getPackageName().toString();
+        } else {
+            PackageName = "";
+        }
+        // get the title
+        String title = "";
+        try {
+            title = pm.getApplicationLabel(pm.getApplicationInfo(PackageName, 0)).toString();
+        } catch (NameNotFoundException e) {
+            title = PackageName;
+        }
+        i.putExtra("notification_title", title);
         sendBroadcast(i);
         
     }
