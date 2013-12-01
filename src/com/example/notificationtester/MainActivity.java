@@ -1,9 +1,10 @@
 package com.example.notificationtester;
 
+import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
-import android.annotation.SuppressLint;
+
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Notification;
@@ -14,13 +15,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.Settings;
-import android.service.notification.StatusBarNotification;
 import android.speech.tts.TextToSpeech;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
@@ -125,8 +123,6 @@ public class MainActivity extends Activity {
 	}
 
     class NotificationReceiver extends BroadcastReceiver{
-
-        @SuppressLint("NewApi")
 		@Override
         public void onReceive(Context context, Intent intent) {
         	Log.d(TAG,"Broadcast received in Main Activity from " + intent.getStringExtra("broadcasting_method"));
@@ -134,6 +130,10 @@ public class MainActivity extends Activity {
         	String notificationText = "";
         	String tickerText = "";
         	String titleText = "";
+        	//variables necessary for writing the same text that gets sent to txtView to a file
+        	String filename = "notificationOutput";
+        	FileOutputStream outputStream;
+        	
         	if (intent.getStringExtra("notification_event") != null){
         		Log.d(TAG,"*******Received notification_event " + eventText);
         		eventText = intent.getStringExtra("notification_event");
@@ -169,6 +169,14 @@ public class MainActivity extends Activity {
     				Log.d(TAG,"notificationText empty");
     			} else {
     				txtView.setText(temp);
+    				//write temp to a text file for accurate record to base pattern parses off of
+    				try {
+    					outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
+    					outputStream.write(temp.getBytes());
+    					outputStream.close();
+    				} catch (Exception e) {
+    					e.printStackTrace();
+    				}
     			}
         	}
         	
