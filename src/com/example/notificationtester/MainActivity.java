@@ -88,9 +88,6 @@ public class MainActivity extends Activity {
             ncomp.setContentIntent(resultPendingIntent);
             nManager.notify(mId,ncomp.build());
         }
-        else if(v.getId() == R.id.btnEnableService){
-            goSettings();
-        }
         else if(v.getId() == R.id.btnListNotify){
             Intent i = new Intent("com.example.notificationlistener.NOTIFICATION_LISTENER_SERVICE_EXAMPLE");
             i.putExtra("command","list");
@@ -101,7 +98,7 @@ public class MainActivity extends Activity {
     }
     
     //will bring them to appropriate settings menu to enable our service
-    public void goSettings(){
+    public void goSettings(View v){
     	Intent intent;
     	if (Build.VERSION.SDK_INT < 18){
     		startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
@@ -140,7 +137,8 @@ public class MainActivity extends Activity {
         		Log.d(TAG,"*******Received notification_event " + eventText);
         	}
         	if (intent.getStringExtra("notification_text") != null){
-        		notificationText = intent.getStringExtra("notification_text");
+        		notificationText = "Notification Text: " 
+        				+ intent.getStringExtra("notification_text") + "\n";
         		Log.d(TAG,"*******Received notification_text " + notificationText);
         	}
 			if (intent.getParcelableExtra("statusbar_notification_object") != null){
@@ -148,7 +146,7 @@ public class MainActivity extends Activity {
 				Notification noti = (Notification) parcel;
 	//			StatusBarNotification sbn = (StatusBarNotification) parcel;
 				if (noti.tickerText != null){
-					tickerText = noti.tickerText.toString();
+					tickerText = "Ticker Text: " + noti.tickerText.toString() + "\n";
 				}
 //				if (sbn.getPackageName() != null){
 //		            pkgName = sbn.getPackageName().toString();
@@ -166,8 +164,7 @@ public class MainActivity extends Activity {
 			appLabel = getPackageLabel(pkgName);
 			String temp = eventText + "\n" 
 //					+ "Application: " + appLabel
-					+ "Ticker text: " + tickerText + "\n"
-					+ "Notification text: " + notificationText + "\n" 
+					+ notificationText
 					+ txtView.getText();
 			if (temp == null || temp.equals("") || temp.equals("null")){
 				Log.d(TAG,"notificationText empty");

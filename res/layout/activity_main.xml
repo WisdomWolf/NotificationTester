@@ -21,14 +21,14 @@
 		android:layout_alignParentRight="true"/>
 
 	<Button
-		android:id="@+id/btnEnableService"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_alignLeft="@+id/btnCreateNotify"
-		android:layout_alignRight="@+id/btnCreateNotify"
-		android:layout_below="@+id/btnCreateNotify"
-		android:onClick="buttonClicked"
-		android:text="Enable Service"/>
+	    android:id="@+id/btnEnableService"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignLeft="@+id/btnCreateNotify"
+	    android:layout_alignRight="@+id/btnCreateNotify"
+	    android:layout_below="@+id/btnCreateNotify"
+	    android:onClick="goSettings"
+	    android:text="Enable Service" />
 
 	<ScrollView
 	    android:layout_width="match_parent"
