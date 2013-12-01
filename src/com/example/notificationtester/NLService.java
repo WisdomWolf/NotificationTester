@@ -98,7 +98,7 @@ public class NLService extends NotificationListenerService {
         				 notificationCapture(sbn);
         			 }
         			 Intent i2 = new  Intent("com.example.notificationlistener.NOTIFICATION_LISTENER_EXAMPLE");
-        			 i2.putExtra("notification_event","===== Notification List ====" + "\n");
+        			 i2.putExtra("notification_event","===== Notification List ====" + "\n" + "\n");
         			 sendBroadcast(i2);
 
         		 }
