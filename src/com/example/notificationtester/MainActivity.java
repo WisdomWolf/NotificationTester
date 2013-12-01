@@ -127,6 +127,7 @@ public class MainActivity extends Activity {
         @SuppressLint("NewApi")
 		@Override
         public void onReceive(Context context, Intent intent) {
+        	Log.d(TAG,"Broadcast received in Main Activity");
         	String eventText = "";
         	String notificationText = "";
         	String tickerText = "";
@@ -142,6 +143,7 @@ public class MainActivity extends Activity {
             				+ intent.getStringExtra("notification_title") + "\n";
             	}
     			if (intent.getParcelableExtra("statusbar_notification_object") != null){
+    				Log.d(TAG,"***parcelable received");
     				Parcelable parcel = intent.getParcelableExtra("statusbar_notification_object");
     				Notification noti = (Notification) parcel;
     				if (noti.tickerText != null){

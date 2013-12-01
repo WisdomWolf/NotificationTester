@@ -35,7 +35,7 @@ public class NLService extends NotificationListenerService {
 
     @Override
     public void onNotificationPosted(StatusBarNotification sbn) {
-        Log.i(TAG,"**********  onNotificationPosted");
+        Log.d(TAG,"**********  onNotificationPosted");
         Log.i(TAG,"ID :" + sbn.getId() + "\t" + sbn.getNotification().tickerText + "\t" + sbn.getPackageName());
         Log.i(TAG,"Notification String:" + sbn.toString());
         //Log.i(TAG,"Intent:" + " " + sbn.getNotification().contentIntent.toString());
@@ -48,7 +48,7 @@ public class NLService extends NotificationListenerService {
     @Override
     public void onNotificationRemoved(StatusBarNotification sbn) {
         //most of what happens here is irrelevant
-    	Log.i(TAG,"********** onNotificationRemoved");
+    	Log.d(TAG,"********** onNotificationRemoved");
         Log.i(TAG,"ID :" + sbn.getId() + "\t" + sbn.getNotification().tickerText +"\t" + sbn.getPackageName());
         Intent i = new  Intent("com.example.notificationlistener.NOTIFICATION_LISTENER_EXAMPLE");
         i.putExtra("notification_event","onNotificationRemoved :" + sbn.getPackageName() + "\n");
@@ -79,7 +79,14 @@ public class NLService extends NotificationListenerService {
             title = packageName;
         }
         i.putExtra("notification_title", title);
-    	sendBroadcast(i);
+        Log.d(TAG,"Preparing to send broadcast.");
+        try {
+        	sendBroadcast(i);
+        } catch (Exception e) {
+        	Log.wtf(TAG,"Broadcast failed to send.");
+        	return;
+        }
+    	Log.d(TAG,"Broadcast sent from notificationCapture");
    }
     
     
