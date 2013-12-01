@@ -164,6 +164,7 @@ public class MainActivity extends Activity {
 			appLabel = getPackageLabel(pkgName);
 			String temp = eventText + "\n" 
 //					+ "Application: " + appLabel
+					+ tickerText
 					+ notificationText
 					+ txtView.getText();
 			if (temp == null || temp.equals("") || temp.equals("null")){
