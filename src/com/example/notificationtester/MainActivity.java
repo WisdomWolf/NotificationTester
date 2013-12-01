@@ -14,10 +14,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.Settings;
+import android.service.notification.StatusBarNotification;
+import android.speech.tts.TextToSpeech;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
@@ -35,6 +39,7 @@ public class MainActivity extends Activity {
     private TextView buildText;
     private int mId = 1337;
     private String TAG = this.getClass().getSimpleName();
+    private TextToSpeech mTTS;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,6 +132,8 @@ public class MainActivity extends Activity {
         	String eventText = "";
         	String notificationText = "";
         	String tickerText = "";
+        	String pkgName = "";
+        	String appLabel;
         	if (intent.getStringExtra("notification_event") != null){
         		eventText = intent.getStringExtra("notification_event");
         		Log.d(TAG,"*******Received notification_event " + eventText);
@@ -138,9 +145,15 @@ public class MainActivity extends Activity {
 			if (intent.getParcelableExtra("statusbar_notification_object") != null){
 				Parcelable parcel = intent.getParcelableExtra("statusbar_notification_object");
 				Notification noti = (Notification) parcel;
+				StatusBarNotification sbn = (StatusBarNotification) parcel;
 				if (noti.tickerText != null){
 					tickerText = noti.tickerText.toString();
 				}
+				if (sbn.getPackageName() != null){
+		            pkgName = sbn.getPackageName().toString();
+		        } else {
+		            pkgName = "";
+		        }
 				if (parcel instanceof Notification) {
 					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
 						notificationText += "\n" + getExtraBigData((Notification) parcel, notificationText.trim());
@@ -149,16 +162,31 @@ public class MainActivity extends Activity {
 					}
 				}
 			}
+			appLabel = getPackageLabel(pkgName);
 			String temp = eventText + "\n" 
-			+ "Ticker text: " + tickerText + "\n"
-			+ "Notification text: " + notificationText + "\n" 
-			+ txtView.getText();
+					+ "Application: " + appLabel
+					+ "Ticker text: " + tickerText + "\n"
+					+ "Notification text: " + notificationText + "\n" 
+					+ txtView.getText();
 			if (temp == null || temp.equals("") || temp.equals("null")){
 				Log.d(TAG,"notificationText empty");
 			} else {
 				txtView.setText(temp);
 			}
+			mTTS.speak(temp, TextToSpeech.QUEUE_FLUSH, null);
 		
+        }
+        
+        private String getPackageLabel(String packagename){
+            PackageManager packageManager = getPackageManager();
+            ApplicationInfo ai;
+            try {
+                ai = packageManager.getApplicationInfo(packagename, 0);
+            } catch (final NameNotFoundException e) {
+                ai = null;
+            }
+            return (String) (ai != null ? packageManager.getApplicationLabel(ai) : packagename);
+
         }
 		
 		private String getExtraData(Notification notification, String existing_text) {
