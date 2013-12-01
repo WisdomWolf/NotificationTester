@@ -143,7 +143,7 @@ public class MainActivity extends Activity {
         	}
         	if (intent.getStringExtra("notification_title") != null){
         		titleText = "Title: " 
-        				+ intent.getStringExtra("title_text") + "\n";
+        				+ intent.getStringExtra("notification_title") + "\n";
         	}
 			if (intent.getParcelableExtra("statusbar_notification_object") != null){
 				Parcelable parcel = intent.getParcelableExtra("statusbar_notification_object");
