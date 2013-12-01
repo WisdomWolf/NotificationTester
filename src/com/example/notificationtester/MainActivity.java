@@ -40,6 +40,7 @@ public class MainActivity extends Activity {
     private int mId = 1337;
     private String TAG = this.getClass().getSimpleName();
     private TextToSpeech mTTS;
+	private ZipFile zf;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,10 +53,9 @@ public class MainActivity extends Activity {
         registerReceiver(nReceiver,filter);
 		buildText = (TextView) findViewById(R.id.txtViewB);
 		getBuildTime();
-		if (Build.VERSION.SDK_INT < 18){
-			Button btn = (Button) findViewById(R.id.btnListNotify);
-			btn.setEnabled(false);
-		}
+		Button btnList = (Button) findViewById(R.id.btnListNotify);
+		btnList.setText("Clear");
+		
     }
 
     @Override
@@ -89,9 +89,11 @@ public class MainActivity extends Activity {
             nManager.notify(mId,ncomp.build());
         }
         else if(v.getId() == R.id.btnListNotify){
-            Intent i = new Intent("com.example.notificationlistener.NOTIFICATION_LISTENER_SERVICE_EXAMPLE");
-            i.putExtra("command","list");
-            sendBroadcast(i);
+//            Intent i = new Intent("com.example.notificationlistener.NOTIFICATION_LISTENER_SERVICE_EXAMPLE");
+//            i.putExtra("command","list");
+//            sendBroadcast(i);
+        	//temporarily repurposing button or so I hope
+        	txtView.setText("");
         }
 
 
@@ -112,7 +114,7 @@ public class MainActivity extends Activity {
 	private void getBuildTime(){
 		try{
 			ApplicationInfo ai = getPackageManager().getApplicationInfo(getPackageName(), 0);
-			ZipFile zf = new ZipFile(ai.sourceDir);
+			zf = new ZipFile(ai.sourceDir);
 			ZipEntry ze = zf.getEntry("classes.dex");
 			long time = ze.getTime();
 			String s = SimpleDateFormat.getInstance().format(new java.util.Date(time));
