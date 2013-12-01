@@ -137,11 +137,6 @@ public class MainActivity extends Activity {
         		String temp = eventText + txtView.getText();
         		txtView.setText(temp);;
         	} else {
-        		if (intent.getStringExtra("notification_text") != null){
-            		notificationText = "Notification Text: " 
-            				+ intent.getStringExtra("notification_text") + "\n";
-            		Log.d(TAG,"*******Received notification_text " + notificationText);
-            	}
             	if (intent.getStringExtra("notification_title") != null){
             		titleText = "Title: " 
             				+ intent.getStringExtra("notification_title") + "\n";
@@ -154,17 +149,17 @@ public class MainActivity extends Activity {
     				}
     				if (parcel instanceof Notification) {
     					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-    						notificationText += "\n" + "Notification Text: "
+    						notificationText += "Notification Text: "
     								+ getExtraBigData((Notification) parcel, notificationText.trim());
     					} else {
-    						notificationText += "\n" + "Notification Text: "
+    						notificationText += "Notification Text: "
     								+ getExtraData((Notification) parcel, notificationText.trim());
     					}
     				}
     			}
     			String temp = titleText
     					+ tickerText
-    					+ notificationText
+    					+ notificationText + "\n"
     					+ txtView.getText();
     			if (temp == null || temp.equals("") || temp.equals("null")){
     				Log.d(TAG,"notificationText empty");

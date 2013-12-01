@@ -59,32 +59,27 @@ public class NLService extends NotificationListenerService {
     
     public void notificationCapture(StatusBarNotification sbn){
     	Log.i(TAG,"********* notificationCapture");
-    	Intent i = new  Intent("com.example.notificationlistener.NOTIFICATION_LISTENER_EXAMPLE");
-    	//String tickerText = sbn.getNotification().tickerText.toString();
-		//if (tickerText == null || tickerText.equalsIgnoreCase("null")) {
-		//	tickerText = "";
-		//}
 		Parcelable parcelable = sbn.getNotification();
 		if (parcelable == null){
 			return;
 		}
+		Intent i = new Intent("com.example.notificationlistener.NOTIFICATION_LISTENER_EXAMPLE");
     	i.putExtra("statusbar_notification_object",parcelable);
     	PackageManager pm = getPackageManager();
-		String PackageName;
+		String packageName;
         if (sbn.getPackageName() != null){
-            PackageName = sbn.getPackageName().toString();
+            packageName = sbn.getPackageName().toString();
         } else {
-            PackageName = "";
+            packageName = "";
         }
         // get the title
         String title = "";
         try {
-            title = pm.getApplicationLabel(pm.getApplicationInfo(PackageName, 0)).toString();
+            title = pm.getApplicationLabel(pm.getApplicationInfo(packageName, 0)).toString();
         } catch (NameNotFoundException e) {
-            title = PackageName;
+            title = packageName;
         }
         i.putExtra("notification_title", title);
-		//i.putExtra("ticker_text",tickerText);
     	sendBroadcast(i);
    }
     
@@ -95,18 +90,15 @@ public class NLService extends NotificationListenerService {
         @Override
         public void onReceive(Context context, Intent intent) {
         	if(intent.hasExtra("command")){
-        		 if(intent.getStringExtra("command").equals("clearall")){
-                     NLService.this.cancelAllNotifications();
-        		 }
-        		 else if(intent.getStringExtra("command").equals("list")){
+        		 if(intent.getStringExtra("command").equals("list")){
         			 Intent i1 = new  Intent("com.example.notificationlistener.NOTIFICATION_LISTENER_EXAMPLE");
-        			 i1.putExtra("notification_event","=====================");
+        			 i1.putExtra("notification_event","=====================" + "\n");
         			 sendBroadcast(i1);
         			 for (StatusBarNotification sbn : NLService.this.getActiveNotifications()) {
         				 notificationCapture(sbn);
         			 }
         			 Intent i2 = new  Intent("com.example.notificationlistener.NOTIFICATION_LISTENER_EXAMPLE");
-        			 i2.putExtra("notification_event","===== Notification List ====");
+        			 i2.putExtra("notification_event","===== Notification List ====" + "\n");
         			 sendBroadcast(i2);
 
         		 }
