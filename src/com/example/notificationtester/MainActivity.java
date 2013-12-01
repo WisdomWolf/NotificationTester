@@ -153,9 +153,11 @@ public class MainActivity extends Activity {
 				}
 				if (parcel instanceof Notification) {
 					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-						notificationText += "\n" + getExtraBigData((Notification) parcel, notificationText.trim());
+						notificationText += "\n" + "Notification Text: "
+								+ getExtraBigData((Notification) parcel, notificationText.trim());
 					} else {
-						notificationText += "\n" + getExtraData((Notification) parcel, notificationText.trim());
+						notificationText += "\n" + "Notification Text: "
+								+ getExtraData((Notification) parcel, notificationText.trim());
 					}
 				}
 			}
