@@ -52,7 +52,7 @@ public class NLService extends NotificationListenerService {
         Log.i(TAG,"ID :" + sbn.getId() + "\t" + sbn.getNotification().tickerText +"\t" + sbn.getPackageName());
         Intent i = new  Intent("com.example.notificationlistener.NOTIFICATION_LISTENER_EXAMPLE");
         i.putExtra("notification_event","onNotificationRemoved :" + sbn.getPackageName() + "\n");
-        i.putExtra("broadcasting_method", "onPosted");
+        i.putExtra("broadcasting_method", "onRemoved");
         sendBroadcast(i);
         
     }
