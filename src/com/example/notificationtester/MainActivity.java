@@ -141,7 +141,7 @@ public class MainActivity extends Activity {
         				+ intent.getStringExtra("notification_text") + "\n";
         		Log.d(TAG,"*******Received notification_text " + notificationText);
         	}
-        	if (intent.getStringExtra("title_text") != null){
+        	if (intent.getStringExtra("notification_title") != null){
         		titleText = "Title: " 
         				+ intent.getStringExtra("title_text") + "\n";
         	}
