@@ -131,46 +131,48 @@ public class MainActivity extends Activity {
         	String notificationText = "";
         	String tickerText = "";
         	String titleText = "";
-        	String appLabel;
         	if (intent.getStringExtra("notification_event") != null){
-        		eventText = intent.getStringExtra("notification_event");
         		Log.d(TAG,"*******Received notification_event " + eventText);
+        		eventText = intent.getStringExtra("notification_event");
+        		String temp = eventText + txtView.getText();
+        		txtView.setText(temp);;
+        	} else {
+        		if (intent.getStringExtra("notification_text") != null){
+            		notificationText = "Notification Text: " 
+            				+ intent.getStringExtra("notification_text") + "\n";
+            		Log.d(TAG,"*******Received notification_text " + notificationText);
+            	}
+            	if (intent.getStringExtra("notification_title") != null){
+            		titleText = "Title: " 
+            				+ intent.getStringExtra("notification_title") + "\n";
+            	}
+    			if (intent.getParcelableExtra("statusbar_notification_object") != null){
+    				Parcelable parcel = intent.getParcelableExtra("statusbar_notification_object");
+    				Notification noti = (Notification) parcel;
+    				if (noti.tickerText != null){
+    					tickerText = "Ticker Text: " + noti.tickerText.toString() + "\n";
+    				}
+    				if (parcel instanceof Notification) {
+    					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+    						notificationText += "\n" + "Notification Text: "
+    								+ getExtraBigData((Notification) parcel, notificationText.trim());
+    					} else {
+    						notificationText += "\n" + "Notification Text: "
+    								+ getExtraData((Notification) parcel, notificationText.trim());
+    					}
+    				}
+    			}
+    			String temp = titleText
+    					+ tickerText
+    					+ notificationText
+    					+ txtView.getText();
+    			if (temp == null || temp.equals("") || temp.equals("null")){
+    				Log.d(TAG,"notificationText empty");
+    			} else {
+    				txtView.setText(temp);
+    			}
         	}
-        	if (intent.getStringExtra("notification_text") != null){
-        		notificationText = "Notification Text: " 
-        				+ intent.getStringExtra("notification_text") + "\n";
-        		Log.d(TAG,"*******Received notification_text " + notificationText);
-        	}
-        	if (intent.getStringExtra("notification_title") != null){
-        		titleText = "Title: " 
-        				+ intent.getStringExtra("notification_title") + "\n";
-        	}
-			if (intent.getParcelableExtra("statusbar_notification_object") != null){
-				Parcelable parcel = intent.getParcelableExtra("statusbar_notification_object");
-				Notification noti = (Notification) parcel;
-				if (noti.tickerText != null){
-					tickerText = "Ticker Text: " + noti.tickerText.toString() + "\n";
-				}
-				if (parcel instanceof Notification) {
-					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-						notificationText += "\n" + "Notification Text: "
-								+ getExtraBigData((Notification) parcel, notificationText.trim());
-					} else {
-						notificationText += "\n" + "Notification Text: "
-								+ getExtraData((Notification) parcel, notificationText.trim());
-					}
-				}
-			}
-			String temp = eventText + "\n" 
-					+ titleText
-					+ tickerText
-					+ notificationText
-					+ txtView.getText();
-			if (temp == null || temp.equals("") || temp.equals("null")){
-				Log.d(TAG,"notificationText empty");
-			} else {
-				txtView.setText(temp);
-			}
+        	
 			//mTTS.speak(temp, TextToSpeech.QUEUE_FLUSH, null);
 		
         }

@@ -39,10 +39,10 @@ public class NLService extends NotificationListenerService {
         Log.i(TAG,"ID :" + sbn.getId() + "\t" + sbn.getNotification().tickerText + "\t" + sbn.getPackageName());
         Log.i(TAG,"Notification String:" + sbn.toString());
         //Log.i(TAG,"Intent:" + " " + sbn.getNotification().contentIntent.toString());
-        Intent i = new  Intent("com.example.notificationlistener.NOTIFICATION_LISTENER_EXAMPLE");
+        //Intent i = new  Intent("com.example.notificationlistener.NOTIFICATION_LISTENER_EXAMPLE");
         //i.putExtra("notification_event","onNotificationPosted :" + sbn.getPackageName() + "\n");
         //additional debugging
-        sendBroadcast(i);
+       // sendBroadcast(i);
         notificationCapture(sbn);
     }
 
@@ -94,21 +94,24 @@ public class NLService extends NotificationListenerService {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(intent.getStringExtra("command").equals("clearall")){
-                    NLService.this.cancelAllNotifications();
-            }
-            else if(intent.getStringExtra("command").equals("list")){
-                Intent i1 = new  Intent("com.example.notificationlistener.NOTIFICATION_LISTENER_EXAMPLE");
-                i1.putExtra("notification_event","=====================");
-                sendBroadcast(i1);
-                for (StatusBarNotification sbn : NLService.this.getActiveNotifications()) {
-                   notificationCapture(sbn);
-                }
-                Intent i2 = new  Intent("com.example.notificationlistener.NOTIFICATION_LISTENER_EXAMPLE");
-                i2.putExtra("notification_event","===== Notification List ====");
-                sendBroadcast(i2);
+        	if(intent.hasExtra("command")){
+        		 if(intent.getStringExtra("command").equals("clearall")){
+                     NLService.this.cancelAllNotifications();
+        		 }
+        		 else if(intent.getStringExtra("command").equals("list")){
+        			 Intent i1 = new  Intent("com.example.notificationlistener.NOTIFICATION_LISTENER_EXAMPLE");
+        			 i1.putExtra("notification_event","=====================");
+        			 sendBroadcast(i1);
+        			 for (StatusBarNotification sbn : NLService.this.getActiveNotifications()) {
+        				 notificationCapture(sbn);
+        			 }
+        			 Intent i2 = new  Intent("com.example.notificationlistener.NOTIFICATION_LISTENER_EXAMPLE");
+        			 i2.putExtra("notification_event","===== Notification List ====");
+        			 sendBroadcast(i2);
 
-            }
+        		 }
+        	}
+           
 
         }
     }
