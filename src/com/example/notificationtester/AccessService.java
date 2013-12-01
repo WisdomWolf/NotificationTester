@@ -46,8 +46,8 @@ public class AccessService extends AccessibilityService {
         
         Intent i = new  Intent("com.example.notificationlistener.NOTIFICATION_LISTENER_EXAMPLE");
         i.putExtra("statusbar_notification_object", parcel);
-		i.putExtra("notification_event",notificationText);
-		i.putExtra("notification_title", title);
+		//i.putExtra("notification_event",notificationText);
+		//i.putExtra("notification_title", title);
         sendBroadcast(i);
             
 	}
