@@ -3,7 +3,7 @@ package com.example.notificationtester;
 import java.text.SimpleDateFormat;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
-
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Notification;
@@ -127,7 +127,8 @@ public class MainActivity extends Activity {
 
     class NotificationReceiver extends BroadcastReceiver{
 
-        @Override
+        @SuppressLint("NewApi")
+		@Override
         public void onReceive(Context context, Intent intent) {
         	String eventText = "";
         	String notificationText = "";
@@ -145,15 +146,15 @@ public class MainActivity extends Activity {
 			if (intent.getParcelableExtra("statusbar_notification_object") != null){
 				Parcelable parcel = intent.getParcelableExtra("statusbar_notification_object");
 				Notification noti = (Notification) parcel;
-				StatusBarNotification sbn = (StatusBarNotification) parcel;
+	//			StatusBarNotification sbn = (StatusBarNotification) parcel;
 				if (noti.tickerText != null){
 					tickerText = noti.tickerText.toString();
 				}
-				if (sbn.getPackageName() != null){
-		            pkgName = sbn.getPackageName().toString();
-		        } else {
-		            pkgName = "";
-		        }
+//				if (sbn.getPackageName() != null){
+//		            pkgName = sbn.getPackageName().toString();
+//		        } else {
+//		            pkgName = "";
+//		        }
 				if (parcel instanceof Notification) {
 					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
 						notificationText += "\n" + getExtraBigData((Notification) parcel, notificationText.trim());
@@ -164,7 +165,7 @@ public class MainActivity extends Activity {
 			}
 			appLabel = getPackageLabel(pkgName);
 			String temp = eventText + "\n" 
-					+ "Application: " + appLabel
+//					+ "Application: " + appLabel
 					+ "Ticker text: " + tickerText + "\n"
 					+ "Notification text: " + notificationText + "\n" 
 					+ txtView.getText();
@@ -173,7 +174,7 @@ public class MainActivity extends Activity {
 			} else {
 				txtView.setText(temp);
 			}
-			mTTS.speak(temp, TextToSpeech.QUEUE_FLUSH, null);
+			//mTTS.speak(temp, TextToSpeech.QUEUE_FLUSH, null);
 		
         }
         
