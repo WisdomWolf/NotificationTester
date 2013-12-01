@@ -41,7 +41,6 @@ public class NLService extends NotificationListenerService {
         //Log.i(TAG,"Intent:" + " " + sbn.getNotification().contentIntent.toString());
         //Intent i = new  Intent("com.example.notificationlistener.NOTIFICATION_LISTENER_EXAMPLE");
         //i.putExtra("notification_event","onNotificationPosted :" + sbn.getPackageName() + "\n");
-        //additional debugging
        // sendBroadcast(i);
         notificationCapture(sbn);
     }
@@ -92,9 +91,10 @@ public class NLService extends NotificationListenerService {
         	if(intent.hasExtra("command")){
         		 if(intent.getStringExtra("command").equals("list")){
         			 Intent i1 = new  Intent("com.example.notificationlistener.NOTIFICATION_LISTENER_EXAMPLE");
-        			 i1.putExtra("notification_event","=====================" + "\n");
+        			 i1.putExtra("notification_event","=====================" + "\n" + "\n");
         			 sendBroadcast(i1);
         			 for (StatusBarNotification sbn : NLService.this.getActiveNotifications()) {
+        				 Log.d(TAG, "Processing Active Notification: " + sbn.getPackageName());
         				 notificationCapture(sbn);
         			 }
         			 Intent i2 = new  Intent("com.example.notificationlistener.NOTIFICATION_LISTENER_EXAMPLE");
