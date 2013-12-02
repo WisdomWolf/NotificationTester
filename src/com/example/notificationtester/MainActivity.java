@@ -130,9 +130,6 @@ public class MainActivity extends Activity {
         	String notificationText = "";
         	String tickerText = "";
         	String titleText = "";
-        	//variables necessary for writing the same text that gets sent to txtView to a file
-        	String filename = "notificationOutput";
-        	FileOutputStream outputStream;
         	
         	if (intent.getStringExtra("notification_event") != null){
         		Log.d(TAG,"*******Received notification_event " + eventText);
@@ -154,10 +151,10 @@ public class MainActivity extends Activity {
     				if (parcel instanceof Notification) {
     					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
     						notificationText += "Notification Text: "
-    								+ getExtraBigData((Notification) parcel, notificationText.trim());
+    								+ getExtraBigData(noti, notificationText.trim());
     					} else {
     						notificationText += "Notification Text: "
-    								+ getExtraData((Notification) parcel, notificationText.trim());
+    								+ getExtraData(noti, notificationText.trim());
     					}
     				}
     			}
@@ -169,14 +166,6 @@ public class MainActivity extends Activity {
     				Log.d(TAG,"notificationText empty");
     			} else {
     				txtView.setText(temp);
-    				//write temp to a text file for accurate record to base pattern parses off of
-    				try {
-    					outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
-    					outputStream.write(temp.getBytes());
-    					outputStream.close();
-    				} catch (Exception e) {
-    					e.printStackTrace();
-    				}
     			}
         	}
         	
@@ -185,7 +174,22 @@ public class MainActivity extends Activity {
         }
 		
 		public void parseNotification (Notification noti, String pkgLabel){
-			//do stuff
+			String tickerText = noti.tickerText.toString();
+			String notificationText = "";
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+				notificationText += "Notification Text: "
+						+ getExtraBigData(noti, notificationText.trim());
+			} else {
+				notificationText += "Notification Text: "
+						+ getExtraData(noti, notificationText.trim());
+			}
+			String s = notificationText.substring(0,1);
+			if (isInteger(s)){
+				//parse as multi-sender input
+			} else {
+				//parse as single sender
+				
+			}
 		}
 		
 		
