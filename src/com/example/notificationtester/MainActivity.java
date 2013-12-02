@@ -184,6 +184,12 @@ public class MainActivity extends Activity {
 		
         }
 		
+		public void parseNotification (Notification noti, String pkgLabel){
+			//do stuff
+		}
+		
+		
+		
 		private String getExtraData(Notification notification, String existing_text) {
 			Log.i(TAG,"******** getExtraData");
 			RemoteViews views = notification.contentView;
