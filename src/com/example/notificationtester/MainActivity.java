@@ -185,10 +185,20 @@ public class MainActivity extends Activity {
 			}
 			String s = notificationText.substring(0,1);
 			if (isInteger(s)){
-				//parse as multi-sender input
+				// parse as multi-sender input
+				/* 
+				 * Get most recent sender from ticker text starting with the second char after : and ending at ,
+				 * second sender would be starting from second char after , and ending at next ,
+				 * Content would begin at third char after senderA and end at CRLF before senderB + 2 spaces
+				 * 
+				 */
 			} else {
 				//parse as single sender
-				
+				/*
+				 * Identify sender from Ticker Text as all chars leading up to :
+				 * Content begins immediately after sender + CRLF
+				 * Alternatively could skip tickerText and just start content from second line
+				 */
 			}
 		}
 		
