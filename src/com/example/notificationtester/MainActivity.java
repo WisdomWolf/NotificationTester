@@ -39,6 +39,7 @@ public class MainActivity extends Activity {
     private String TAG = this.getClass().getSimpleName();
     private TextToSpeech mTTS;
 	private ZipFile zf;
+	private int msgCount = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,8 +131,9 @@ public class MainActivity extends Activity {
         	String notificationText = "";
         	String tickerText = "";
         	String titleText = "";
+        	msgCount++;
         	//variables necessary for writing the same text that gets sent to txtView to a file
-        	String filename = "notificationOutput";
+        	String filename = "notificationOutput" + msgCount;
         	FileOutputStream outputStream;
         	
         	if (intent.getStringExtra("notification_event") != null){
