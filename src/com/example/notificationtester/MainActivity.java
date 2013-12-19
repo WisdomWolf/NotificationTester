@@ -2,6 +2,7 @@ package com.example.notificationtester;
 
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
+import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -39,6 +40,7 @@ public class MainActivity extends Activity {
     private String TAG = this.getClass().getSimpleName();
     private TextToSpeech mTTS;
 	private ZipFile zf;
+	Pattern firstHangoutsSender = Pattern.compile("(?<=:\\s).*?(?=,)");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
