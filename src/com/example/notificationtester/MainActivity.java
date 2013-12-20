@@ -165,8 +165,7 @@ public class MainActivity extends Activity {
     			}
     			String temp = titleText
     					+ tickerText
-    					+ notificationText + "\n"
-    					+ txtView.getText();
+    					+ notificationText + "\n";
     			if (temp == null || temp.equals("") || temp.equals("null")){
     				Log.d(TAG,"notificationText empty");
     			} else {
