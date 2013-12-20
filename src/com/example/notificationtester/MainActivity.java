@@ -151,7 +151,7 @@ public class MainActivity extends Activity {
     			}
 				Matcher m = firstHangoutsSender.matcher(tickerText);
 				while (m.find()){
-					senderOne = m.group(1);
+					senderOne = m.group();
 				}
 				
     			String temp = titleText
