@@ -41,9 +41,9 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
     private String TAG = this.getClass().getSimpleName();
 	private ZipFile zf;
 	private TextToSpeech mTTS;
-	private boolean readyToSpeak = false;
 	private String spokenText = "";
 	Pattern firstHangoutsSender = Pattern.compile("(?<=:\\s).*?(?=,)");
+	
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +83,6 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
 					|| result == TextToSpeech.LANG_NOT_SUPPORTED) {
 				Log.e("TTS", "This Language is not supported");
 			} else {
-				readyToSpeak = true;
 				speakOut();
 			}
 
@@ -236,9 +235,10 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
 		
         }
 		
-		public void parseNotification (Notification noti, String pkgLabel){
+		public void parseHangoutsNotification (Notification noti, String pkgLabel){
 			String tickerText = noti.tickerText.toString();
 			String notificationText = "";
+			
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
 				notificationText += "Notification Text: "
 						+ getExtraBigData(noti, notificationText.trim());
@@ -246,14 +246,16 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
 				notificationText += "Notification Text: "
 						+ getExtraData(noti, notificationText.trim());
 			}
-			String s = notificationText.substring(0,1);
+			
+			//determining if this is a single conversation or consolidated message
+			String s = tickerText.substring(0,1);
 			if (isInteger(s)){
-				// parse as multi-sender input
-				/* 
-				 * Get most recent sender from ticker text starting with the second char after : and ending at ,
-				 * second sender would be starting from second char after , and ending at next ,
-				 * Content would begin at third char after senderA and end at CRLF before senderB + 2 spaces
-				 * 
+				// This is a consolidated message.
+				/* Determine if it is from a single sender or part of a group conversation.
+				//search tickerText and identify if there is a space in the first sender's name.  
+				//Probably easiest to use existing regex to determine senderOne and search for whitespace (\\s) in senderOne
+				//if (senderOne has space)
+				 
 				 */
 			} else {
 				//parse as single sender
