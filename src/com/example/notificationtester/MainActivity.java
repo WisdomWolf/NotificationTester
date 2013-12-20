@@ -42,6 +42,7 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
 	private ZipFile zf;
 	private TextToSpeech mTTS;
 	private boolean readyToSpeak = false;
+	private String spokenText = "";
 	Pattern firstHangoutsSender = Pattern.compile("(?<=:\\s).*?(?=,)");
 
     @Override
@@ -82,6 +83,7 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
 				Log.e("TTS", "This Language is not supported");
 			} else {
 				readyToSpeak = true;
+				speakOut();
 			}
 
 		} else {
@@ -90,10 +92,8 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
 
 	}
     
-    public void speakOut(String spokenText){
-    	if (readyToSpeak) {
-			mTTS.speak(spokenText, TextToSpeech.QUEUE_FLUSH, null);
-		}
+    public void speakOut(){
+    	mTTS.speak(spokenText, TextToSpeech.QUEUE_FLUSH, null);
     }
 
 
@@ -216,14 +216,14 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
 				while (m3.find()){
 					hangoutsMessage = m3.group();
 				}
-				String spokenText = "New " + titleText + " message from " + senderOne + "\n"
+				spokenText = "New " + titleText + " message from " + senderOne + "\n"
 						+ hangoutsMessage;
 				
     			String temp = tickerTextOutput
     					+ notificationTextOutput + "\n"
 						+ spokenText;
     			
-    			speakOut(spokenText);
+    			speakOut();
     			if (temp == null || temp.equals("") || temp.equals("null")){
     				Log.d(TAG,"notificationText empty");
     			} else {
