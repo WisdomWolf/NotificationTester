@@ -254,15 +254,27 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
 				/* Determine if it is from a single sender or part of a group conversation.
 				//search tickerText and identify if there is a space in the first sender's name.  
 				//Probably easiest to use existing regex to determine senderOne and search for whitespace (\\s) in senderOne
-				//if (senderOne has space)
+				//if (senderOne has space){
+					process using established regex guidelines.
+				} else {
+					Possibly give a generic notification. No way to extract content from group convo in consolidated notification.
+				}
 				 
 				 */
 			} else {
-				//parse as single sender
+				//this is a standalone messsge or part of an ongoing convo thread
 				/*
-				 * Identify sender from Ticker Text as all chars leading up to :
-				 * Content begins immediately after sender + CRLF
-				 * Alternatively could skip tickerText and just start content from second line
+					//Determining if this message is standalone
+					if (tickerText ends with "\\d new messages"){
+						//probably not a standalone message, but we should do one more test
+						if (tickerText matches notificationText){
+							//its a standalone messsage
+						} else {
+							//its part of a thread
+						}
+					} else {
+							//its part of a message thread
+					}
 				 */
 			}
 		}
