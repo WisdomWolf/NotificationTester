@@ -131,8 +131,7 @@ public class MainActivity extends Activity {
         		txtView.setText(temp);;
         	} else {
             	if (intent.getStringExtra("notification_title") != null){
-            		titleText = "Title: " 
-            				+ intent.getStringExtra("notification_title") + "\n";
+            		titleText = intent.getStringExtra("notification_title");
             	}
     			if (intent.getParcelableExtra("statusbar_notification_object") != null){
     				Log.d(TAG,"***parcelable received");
@@ -172,8 +171,7 @@ public class MainActivity extends Activity {
 					hangoutsMessage = m3.group();
 				}
 				
-    			String temp = titleText
-    					+ tickerTextOutput
+    			String temp = tickerTextOutput
     					+ notificationTextOutput + "\n"
 						+ "New " + titleText + " message from " + senderOne + "\n"
 						+ hangoutsMessage;
