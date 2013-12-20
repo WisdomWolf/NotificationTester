@@ -153,7 +153,7 @@ public class MainActivity extends Activity {
 				while (m.find()){
 					senderOne = m.group();
 				}
-				Pattern secondHangoutsSender = Pattern.compile("(?<=" + senderOne + ",\\s).*?(?=,?)");
+				Pattern secondHangoutsSender = Pattern.compile("(?<=" + senderOne + ",\\s).*?(?=(,|$))");
 				Matcher m2 = secondHangoutsSender.matcher(tickerText);
 				while (m2.find()){
 					senderTwo = m2.group();
