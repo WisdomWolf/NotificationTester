@@ -116,11 +116,14 @@ public class MainActivity extends Activity {
         	Log.d(TAG,"Broadcast received in Main Activity from " + intent.getStringExtra("broadcasting_method"));
         	String eventText = "";
         	String notificationText = "";
+        	String notificationTextOutput = "";
         	String tickerText = "";
 			String tickerTextOutput = "";
         	String titleText = "";
 			String senderOne = "";
         	String senderTwo = "";
+        	String hangoutsMessage = "";
+        	
         	if (intent.getStringExtra("notification_event") != null){
         		Log.d(TAG,"*******Received notification_event " + eventText);
         		eventText = intent.getStringExtra("notification_event");
@@ -141,29 +144,40 @@ public class MainActivity extends Activity {
 						}
     				if (parcel instanceof Notification) {
     					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-    						notificationText += "Notification Text: "
-    								+ getExtraBigData(noti, notificationText.trim());
+    						notificationText += getExtraBigData(noti, notificationText.trim());
+    						notificationTextOutput = "Notification Text: " + notificationText;
     					} else {
-    						notificationText += "Notification Text: "
-    								+ getExtraData(noti, notificationText.trim());
+    						notificationText += getExtraData(noti, notificationText.trim());
+    						notificationTextOutput = "Notification Text: " + notificationText;
     					}
     				}
     			}
+    			//identifying the sender of this notification
 				Matcher m = firstHangoutsSender.matcher(tickerText);
 				while (m.find()){
 					senderOne = m.group();
 				}
-				Pattern secondHangoutsSender = Pattern.compile("(?<=" + senderOne + ",\\s).*?(?=(,|$))");
-				Matcher m2 = secondHangoutsSender.matcher(tickerText);
+				
+				//establishing second stated sender so we can use as a delimiter for notification content extraction
+				Pattern p2 = Pattern.compile("(?<=" + senderOne + ",\\s).*?(?=(,|$))");
+				Matcher m2 = p2.matcher(tickerText);
 				while (m2.find()){
 					senderTwo = m2.group();
 				}
 				
+				//extracting the contents of just this most recent message
+				Pattern p3 = Pattern.compile("(?<=" + senderOne + "\\s\\s)[\\w\\W]*?(?=\\s" + senderTwo + "\\s\\s)");
+				Matcher m3 = p3.matcher(notificationText);
+				while (m3.find()){
+					hangoutsMessage = m3.group();
+				}
+				
     			String temp = titleText
     					+ tickerTextOutput
-    					+ notificationText + "\n"
+    					+ notificationTextOutput + "\n"
 						+ "senderOne: " + senderOne + "\n"
-						+ "senderTwo: " + senderTwo;
+						+ "senderTwo: " + senderTwo + "\n"
+						+ "Message: " + hangoutsMessage;
     			if (temp == null || temp.equals("") || temp.equals("null")){
     				Log.d(TAG,"notificationText empty");
     			} else {
