@@ -117,6 +117,7 @@ public class MainActivity extends Activity {
         	String eventText = "";
         	String notificationText = "";
         	String tickerText = "";
+			String tickerTextOutput = "";
         	String titleText = "";
 			String senderOne = "empty";
         	
@@ -135,8 +136,9 @@ public class MainActivity extends Activity {
     				Parcelable parcel = intent.getParcelableExtra("statusbar_notification_object");
     				Notification noti = (Notification) parcel;
     				if (noti.tickerText != null){
-    					tickerText = "Ticker Text: " + noti.tickerText.toString() + "\n";
-    				}
+    					tickerTextOutput = "Ticker Text: " + noti.tickerText.toString() + "\n";
+    					tickerText = noti.tickerText.toString();
+						}
     				if (parcel instanceof Notification) {
     					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
     						notificationText += "Notification Text: "
@@ -153,7 +155,7 @@ public class MainActivity extends Activity {
 				}
 				
     			String temp = titleText
-    					+ tickerText
+    					+ tickerTextOutput
     					+ notificationText + "\n"
 						+ "senderOne: " + senderOne;
     			if (temp == null || temp.equals("") || temp.equals("null")){
