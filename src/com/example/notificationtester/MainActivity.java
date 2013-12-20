@@ -175,9 +175,8 @@ public class MainActivity extends Activity {
     			String temp = titleText
     					+ tickerTextOutput
     					+ notificationTextOutput + "\n"
-						+ "senderOne: " + senderOne + "\n"
-						+ "senderTwo: " + senderTwo + "\n"
-						+ "Message: " + hangoutsMessage;
+						+ "New " + titleText + " message from " + senderOne + "\n"
+						+ hangoutsMessage;
     			if (temp == null || temp.equals("") || temp.equals("null")){
     				Log.d(TAG,"notificationText empty");
     			} else {
