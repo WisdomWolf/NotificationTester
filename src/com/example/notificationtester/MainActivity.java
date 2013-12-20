@@ -1,31 +1,47 @@
 package com.example.notificationtester;
 
-import android.annotation.*;
-import android.app.*;
-import android.content.*;
-import android.content.pm.*;
-import android.os.*;
-import android.provider.*;
-import android.speech.tts.*;
-import android.support.v4.app.*;
-import android.util.*;
-import android.view.*;
-import android.widget.*;
-import java.text.*;
-import java.util.regex.*;
-import java.util.zip.*;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
+import android.annotation.TargetApi;
+import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.ApplicationInfo;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.Parcelable;
+import android.provider.Settings;
+import android.speech.tts.TextToSpeech;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.RemoteViews;
+import android.widget.TextView;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements TextToSpeech.OnInitListener{
 
 	private TextView txtView;
     private NotificationReceiver nReceiver;
     private TextView buildText;
     private int mId = 1337;
     private String TAG = this.getClass().getSimpleName();
-    private TextToSpeech mTTS;
 	private ZipFile zf;
+	private TextToSpeech mTTS;
+	private boolean readyToSpeak = false;
 	Pattern firstHangoutsSender = Pattern.compile("(?<=:\\s).*?(?=,)");
 
     @Override
@@ -47,8 +63,31 @@ public class MainActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (mTTS != null){
+        	mTTS.stop();
+        	mTTS.shutdown();
+        }
         unregisterReceiver(nReceiver);
     }
+    
+    public void onInit(int status) {
+
+		if (status == TextToSpeech.SUCCESS) {
+
+			int result = mTTS.setLanguage(Locale.US);
+
+			if (result == TextToSpeech.LANG_MISSING_DATA
+					|| result == TextToSpeech.LANG_NOT_SUPPORTED) {
+				Log.e("TTS", "This Language is not supported");
+			} else {
+				readyToSpeak = true;
+			}
+
+		} else {
+			Log.e("TTS", "Initilization Failed!");
+		}
+
+	}
 
 
 
@@ -170,11 +209,14 @@ public class MainActivity extends Activity {
 				while (m3.find()){
 					hangoutsMessage = m3.group();
 				}
+				String spokenText = "New " + titleText + " message from " + senderOne + "\n"
+						+ hangoutsMessage;
 				
     			String temp = tickerTextOutput
     					+ notificationTextOutput + "\n"
-						+ "New " + titleText + " message from " + senderOne + "\n"
-						+ hangoutsMessage;
+						+ spokenText;
+    			
+    			mTTS.speak(spokenText, TextToSpeech.QUEUE_FLUSH, null);
     			if (temp == null || temp.equals("") || temp.equals("null")){
     				Log.d(TAG,"notificationText empty");
     			} else {
@@ -182,7 +224,7 @@ public class MainActivity extends Activity {
     			}
         	}
         	
-			//mTTS.speak(temp, TextToSpeech.QUEUE_FLUSH, null);
+			
 		
         }
 		
@@ -295,7 +337,5 @@ public class MainActivity extends Activity {
 			}
 		}
     }
-
-
 
 }
