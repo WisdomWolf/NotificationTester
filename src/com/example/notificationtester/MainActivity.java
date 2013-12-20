@@ -62,14 +62,15 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
-        if (mTTS != null){
-        	mTTS.stop();
-        	mTTS.shutdown();
-        }
+    	if (mTTS != null){
+    		mTTS.stop();
+    		mTTS.shutdown();
+    	}
+    	super.onDestroy();
         unregisterReceiver(nReceiver);
     }
     
+    @Override
     public void onInit(int status) {
 
 		if (status == TextToSpeech.SUCCESS) {
@@ -88,6 +89,12 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
 		}
 
 	}
+    
+    public void speakOut(String spokenText){
+    	if (readyToSpeak) {
+			mTTS.speak(spokenText, TextToSpeech.QUEUE_FLUSH, null);
+		}
+    }
 
 
 
@@ -216,7 +223,7 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
     					+ notificationTextOutput + "\n"
 						+ spokenText;
     			
-    			mTTS.speak(spokenText, TextToSpeech.QUEUE_FLUSH, null);
+    			speakOut(spokenText);
     			if (temp == null || temp.equals("") || temp.equals("null")){
     				Log.d(TAG,"notificationText empty");
     			} else {
