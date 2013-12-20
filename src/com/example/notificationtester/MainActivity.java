@@ -1,35 +1,21 @@
 package com.example.notificationtester;
 
-import java.io.FileOutputStream;
-import java.text.SimpleDateFormat;
-import java.util.regex.Pattern;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
+import android.annotation.*;
+import android.app.*;
+import android.content.*;
+import android.content.pm.*;
+import android.os.*;
+import android.provider.*;
+import android.speech.tts.*;
+import android.support.v4.app.*;
+import android.util.*;
+import android.view.*;
+import android.widget.*;
+import java.text.*;
+import java.util.regex.*;
+import java.util.zip.*;
 
-import android.annotation.TargetApi;
-import android.app.Activity;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.pm.ApplicationInfo;
-import android.os.Build;
-import android.os.Bundle;
-import android.os.Parcelable;
-import android.provider.Settings;
-import android.speech.tts.TextToSpeech;
-import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.RemoteViews;
-import android.widget.TextView;
 
 public class MainActivity extends Activity {
 
@@ -132,6 +118,7 @@ public class MainActivity extends Activity {
         	String notificationText = "";
         	String tickerText = "";
         	String titleText = "";
+			String senderOne = "empty";
         	
         	if (intent.getStringExtra("notification_event") != null){
         		Log.d(TAG,"*******Received notification_event " + eventText);
@@ -160,10 +147,15 @@ public class MainActivity extends Activity {
     					}
     				}
     			}
+				Matcher m = firstHangoutsSender.matcher(tickerText);
+				if (m.groupCount() >= 1){
+					senderOne = m.group();
+				}
+				
     			String temp = titleText
     					+ tickerText
     					+ notificationText + "\n"
-    					+ txtView.getText();
+						+ "senderOne: " + senderOne;
     			if (temp == null || temp.equals("") || temp.equals("null")){
     				Log.d(TAG,"notificationText empty");
     			} else {
