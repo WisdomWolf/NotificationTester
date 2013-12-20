@@ -119,8 +119,8 @@ public class MainActivity extends Activity {
         	String tickerText = "";
 			String tickerTextOutput = "";
         	String titleText = "";
-			String senderOne = "empty";
-        	
+			String senderOne = "";
+        	String senderTwo = "";
         	if (intent.getStringExtra("notification_event") != null){
         		Log.d(TAG,"*******Received notification_event " + eventText);
         		eventText = intent.getStringExtra("notification_event");
@@ -153,11 +153,17 @@ public class MainActivity extends Activity {
 				while (m.find()){
 					senderOne = m.group();
 				}
+				Pattern secondHangoutsSender = Pattern.compile("(?<=" + senderOne + ",\\s).*?(?=,?)");
+				Matcher m2 = secondHangoutsSender.matcher(tickerText);
+				while (m2.find()){
+					senderTwo = m2.group();
+				}
 				
     			String temp = titleText
     					+ tickerTextOutput
     					+ notificationText + "\n"
-						+ "senderOne: " + senderOne;
+						+ "senderOne: " + senderOne + "\n"
+						+ "senderTwo: " + senderTwo;
     			if (temp == null || temp.equals("") || temp.equals("null")){
     				Log.d(TAG,"notificationText empty");
     			} else {
