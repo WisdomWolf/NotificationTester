@@ -148,8 +148,8 @@ public class MainActivity extends Activity {
     				}
     			}
 				Matcher m = firstHangoutsSender.matcher(tickerText);
-				if (m.groupCount() >= 1){
-					senderOne = m.group();
+				while (m.lookingAt()){
+					senderOne = m.group(1);
 				}
 				
     			String temp = titleText
