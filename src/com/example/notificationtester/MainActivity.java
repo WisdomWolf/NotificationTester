@@ -58,6 +58,7 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
 		getBuildTime();
 		Button btnList = (Button) findViewById(R.id.btnListNotify);
 		btnList.setText("Clear");
+		mTTS = new TextToSpeech(this,this);
 		
     }
 
