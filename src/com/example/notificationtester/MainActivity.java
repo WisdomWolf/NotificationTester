@@ -253,10 +253,11 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
 					}
 					Pattern p3;
 					if (senderTwo.matches(".*,.*")) {
-						//Second sender is a group message
-						p3 = Pattern.compile("(?<=" + senderOne + "\\s\\s)[\\w\\W]*?(?=\\s" + senderTwo + "\\s...)");
+						p3 = Pattern.compile("(?<=" + senderOne + "\\s\\s)[\\w\\W]*?(?=" + senderTwo + "\\s)");
+						Log.i(TAG,"Second sender is a group");
 					} else {
-						p3 = Pattern.compile("(?<=" + senderOne + "\\s\\s)[\\w\\W]*?(?=\\s" + senderTwo + "\\s\\s)");
+						p3 = Pattern.compile("(?<=" + senderOne + ",\\s\\s)[\\w\\W]*?(?=\\s" + senderTwo + "\\s\\s)");
+						Log.i(TAG,"Solo consolidated message identified");
 					}
 					//extracting the contents of just this most recent message
 					Matcher m3 = p3.matcher(notificationText);
