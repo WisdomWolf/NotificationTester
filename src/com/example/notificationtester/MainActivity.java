@@ -41,7 +41,8 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
     private String TAG = this.getClass().getSimpleName();
 	private ZipFile zf;
 	private TextToSpeech mTTS;
-	private String spokenText = "";
+	private String speakableText = "";
+	private String lastMessage = "$";
 	Pattern firstHangoutsSender = Pattern.compile("(?<=:\\s).*?(?=,)");
 	
 
@@ -93,7 +94,7 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
 	}
     
     public void speakOut(){
-    	mTTS.speak(spokenText, TextToSpeech.QUEUE_FLUSH, null);
+    	mTTS.speak(speakableText, TextToSpeech.QUEUE_FLUSH, null);
     }
 
 
@@ -166,9 +167,7 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
         	String tickerText = "";
 			String tickerTextOutput = "";
         	String titleText = "";
-			String senderOne = "";
-        	String senderTwo = "";
-        	String hangoutsMessage = "";
+        	Notification noti = null;
         	
         	if (intent.getStringExtra("notification_event") != null){
         		Log.d(TAG,"*******Received notification_event " + eventText);
@@ -182,7 +181,7 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
     			if (intent.getParcelableExtra("statusbar_notification_object") != null){
     				Log.d(TAG,"***parcelable received");
     				Parcelable parcel = intent.getParcelableExtra("statusbar_notification_object");
-    				Notification noti = (Notification) parcel;
+    				noti = (Notification) parcel;
     				if (noti.tickerText != null){
     					tickerTextOutput = "Ticker Text: " + noti.tickerText.toString() + "\n";
     					tickerText = noti.tickerText.toString();
@@ -197,33 +196,14 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
     					}
     				}
     			}
-    			//identifying the sender of this notification
-				Matcher m = firstHangoutsSender.matcher(tickerText);
-				while (m.find()){
-					senderOne = m.group();
-				}
-				
-				//establishing second stated sender so we can use as a delimiter for notification content extraction
-				Pattern p2 = Pattern.compile("(?<=" + senderOne + ",\\s).*?(?=(,|$))");
-				Matcher m2 = p2.matcher(tickerText);
-				while (m2.find()){
-					senderTwo = m2.group();
-				}
-				
-				//extracting the contents of just this most recent message
-				Pattern p3 = Pattern.compile("(?<=" + senderOne + "\\s\\s)[\\w\\W]*?(?=\\s" + senderTwo + "\\s\\s)");
-				Matcher m3 = p3.matcher(notificationText);
-				while (m3.find()){
-					hangoutsMessage = m3.group();
-				}
-				spokenText = "New " + titleText + " message from " + senderOne + "\n"
-						+ hangoutsMessage;
+    			if (titleText.equalsIgnoreCase("hangouts") && noti != null) {
+    				parseHangoutsNotification(noti);
+    			}
 				
     			String temp = tickerTextOutput
     					+ notificationTextOutput + "\n"
-						+ spokenText;
+						+ speakableText;
     			
-    			speakOut();
     			if (temp == null || temp.equals("") || temp.equals("null")){
     				Log.d(TAG,"notificationText empty");
     			} else {
@@ -235,9 +215,13 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
 		
         }
 		
-		public void parseHangoutsNotification (Notification noti, String pkgLabel){
+		public void parseHangoutsNotification (Notification noti){
 			String tickerText = noti.tickerText.toString();
 			String notificationText = "";
+			String senderOne = "";
+			String senderTwo = "";
+			String message = "";
+			Pattern firstHangoutsSender = Pattern.compile("(?<=:\\s).*?(?=,)");
 			
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
 				notificationText += "Notification Text: "
@@ -251,28 +235,84 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
 			String s = tickerText.substring(0,1);
 			if (isInteger(s)){
 				// This is a consolidated message.
-				/* Determine if it is from a single sender or part of a group conversation.
-				//search tickerText and identify if there is a space in the first sender's name.  
-				//Probably easiest to use existing regex to determine senderOne and search for whitespace (\\s) in senderOne
-				if (senderOne has space){
-					process using established regex guidelines.
-				} else {
-					Possibly give a generic notification. No way to extract content from group convo in consolidated notification.
+				//identifying the sender of this notification
+				Matcher m = firstHangoutsSender.matcher(tickerText);
+				while (m.find()){
+					senderOne = m.group();
 				}
-				 
-				 */
+				 //Determine if it is from a single sender or part of a group conversation.
+				if (senderOne.matches("\\s")){
+					//establishing second stated sender so we can use as a delimiter for notification content extraction
+					Pattern p2 = Pattern.compile("(?<=" + senderOne + ",\\s).*?(?=(,|$))");
+					Matcher m2 = p2.matcher(tickerText);
+					while (m2.find()){
+						senderTwo = m2.group();
+					}
+					//extracting the contents of just this most recent message
+					Pattern p3 = Pattern.compile("(?<=" + senderOne + "\\s\\s)[\\w\\W]*?(?=\\n" + senderTwo + "\\s\\s)");
+					Matcher m3 = p3.matcher(notificationText);
+					while (m3.find()){
+						message = m3.group();
+					}
+				} else {
+					//Possibly give a generic notification. No way to extract content from group convo in consolidated notification.
+					speakableText = "New group hangouts message.";
+					speakOut();
+					return;
+				}
 			} else {
 				//this is a standalone message or part of an ongoing convo thread
-				/*
-					//Determining if this message is standalone
-					if (tickerText ends with "\\d new messages" && tickerText matches notification text){
-						//its a standalone messsage
-					} else {
-						//its part of a message thread
-						//best way to handle requires the previous message contents to use as a reference point to begin parsing from
+				//identify sender/group
+				Pattern p4 = Pattern.compile("^.*:");
+				Matcher m4 = p4.matcher(tickerText);
+				while (m4.find()){
+					senderOne = m4.group();
+				}
+				//separate out content from sender in tickerText
+				String tickerContent = "";
+				Pattern p5 = Pattern.compile("(?<=:\\s).*");
+				Matcher m5 = p5.matcher(tickerText);
+				while (m5.find()){
+					tickerContent = m5.group();
+				}
+				//Determining if this message is standalone
+				if (tickerText.matches("\\d{2}\\snew\\smessages$") && notificationText.equals(senderOne + "\n"
+						+ tickerContent)){
+					//its a standalone messsage
+					message = tickerContent;
+				} else {
+					//its part of a message thread
+					//best way to handle requires the previous message contents to use as a reference point to begin parsing from
+					//Determine if it's solo or group message
+					String notificationContent = "";
+					Pattern p6 = Pattern.compile("(?<=" + senderOne + "\\n)[\\w\\W]*?(?=\\n" + lastMessage +")");
+					Matcher m6 = p6.matcher(notificationText);
+					while (m6.find()) {
+						notificationContent = m6.group();
 					}
-				 */
+					lastMessage = notificationContent;
+					if (senderOne.matches(",")) {
+						//it's a group message and sender must be extracted
+						Pattern p7 = Pattern.compile("^.*(?=\\s)");
+						Matcher m7 = p7.matcher(notificationContent);
+						while (m7.find()) {
+							senderOne = m7.group() + " in group hangout";
+						}
+						//extracting message content
+						Pattern p8 = Pattern.compile("(?<=" + senderOne + "\\s).*");
+						Matcher m8 = p8.matcher(notificationContent);
+						while (m8.find()) {
+							message = m8.group();
+						}
+					} else {
+						//it's a solo message
+						message = notificationContent;
+					}
+				}
 			}
+			speakableText = "New hangouts message from " + senderOne + ".  " 
+					+ message;
+			speakOut();
 		}
 		
 		
