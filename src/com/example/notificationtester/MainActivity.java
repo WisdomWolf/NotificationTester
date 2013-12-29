@@ -221,7 +221,7 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
 			String senderOne = "";
 			String senderTwo = "";
 			String message = "";
-			Pattern firstHangoutsSender = Pattern.compile("(?<=:\\s).*?(?=,)");
+			Pattern firstHangoutsSender = Pattern.compile("(?<=:\\s).*?\\s.*?(?=,)");
 			Log.i(TAG,"Hangouts parse initiated. Last message is " + lastMessage);
 			
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
@@ -245,10 +245,11 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
 				 //Determine if it is from a single sender or part of a group conversation.
 				if (senderOne.matches(".*\\s.*")){
 					//establishing second stated sender so we can use as a delimiter for notification content extraction
-					Pattern p2 = Pattern.compile("(?<=" + senderOne + ",\\s).*?(?=(,|$))");
+					Pattern p2 = Pattern.compile("(?<=" + senderOne + ",\\s).*?\\s.*?(?=(,|$))");
 					Matcher m2 = p2.matcher(tickerText);
 					while (m2.find()){
 						senderTwo = m2.group();
+						Log.i(TAG,"senderTwo set to " + senderTwo);
 					}
 					//extracting the contents of just this most recent message
 					Pattern p3 = Pattern.compile("(?<=" + senderOne + "\\s\\s)[\\w\\W]*?(?=\\n" + senderTwo + "\\s\\s)");
