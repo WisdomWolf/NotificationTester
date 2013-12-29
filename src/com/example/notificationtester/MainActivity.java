@@ -252,7 +252,7 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
 						Log.i(TAG,"senderTwo set to " + senderTwo);
 					}
 					Pattern p3;
-					if (senderTwo.matches("*.,.*")) {
+					if (senderTwo.matches(".*,.*")) {
 						//Second sender is a group message
 						p3 = Pattern.compile("(?<=" + senderOne + "\\s\\s)[\\w\\W]*?(?=\\s" + senderTwo + "\\s...");
 					} else {
