@@ -42,7 +42,7 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
 	private ZipFile zf;
 	private TextToSpeech mTTS;
 	private String speakableText = "";
-	private String lastMessage = "$";
+	private String lastMessage = "";
 	Pattern firstHangoutsSender = Pattern.compile("(?<=:\\s).*?(?=,)");
 	
 
@@ -222,6 +222,7 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
 			String senderTwo = "";
 			String message = "";
 			Pattern firstHangoutsSender = Pattern.compile("(?<=:\\s).*?(?=,)");
+			Log.i(TAG,"Hangouts parse initiated. Last message is " + lastMessage);
 			
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
 				notificationText += "Notification Text: "
@@ -239,6 +240,7 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
 				Matcher m = firstHangoutsSender.matcher(tickerText);
 				while (m.find()){
 					senderOne = m.group();
+					Log.i(TAG,"senderOne set to " + senderOne);
 				}
 				 //Determine if it is from a single sender or part of a group conversation.
 				if (senderOne.matches("\\s")){
@@ -253,6 +255,7 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
 					Matcher m3 = p3.matcher(notificationText);
 					while (m3.find()){
 						message = m3.group();
+						Log.i(TAG,"message set to " + message);
 					}
 				} else {
 					//Possibly give a generic notification. No way to extract content from group convo in consolidated notification.
@@ -263,10 +266,11 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
 			} else {
 				//this is a standalone message or part of an ongoing convo thread
 				//identify sender/group
-				Pattern p4 = Pattern.compile("^.*:");
+				Pattern p4 = Pattern.compile("^.*(?=:)");
 				Matcher m4 = p4.matcher(tickerText);
 				while (m4.find()){
 					senderOne = m4.group();
+					Log.i(TAG,"senderOne set to " + senderOne);
 				}
 				//separate out content from sender in tickerText
 				String tickerContent = "";
@@ -280,15 +284,17 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
 						+ tickerContent)){
 					//its a standalone messsage
 					message = tickerContent;
+					Log.i(TAG,"message set to " + message);
 				} else {
 					//its part of a message thread
 					//best way to handle requires the previous message contents to use as a reference point to begin parsing from
 					//Determine if it's solo or group message
 					String notificationContent = "";
-					Pattern p6 = Pattern.compile("(?<=" + senderOne + "\\n)[\\w\\W]*?(?=\\n" + lastMessage +")");
+					Pattern p6 = Pattern.compile("(?<=" + senderOne + "\\n" + lastMessage + ")" + "[\\w\\W]*");
 					Matcher m6 = p6.matcher(notificationText);
 					while (m6.find()) {
 						notificationContent = m6.group();
+						Log.i(TAG,"Notification Content set to " + notificationContent);
 					}
 					lastMessage = notificationContent;
 					if (senderOne.matches(",")) {
@@ -297,16 +303,19 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
 						Matcher m7 = p7.matcher(notificationContent);
 						while (m7.find()) {
 							senderOne = m7.group() + " in group hangout";
+							Log.i(TAG,"senderOne set to " + senderOne);
 						}
 						//extracting message content
 						Pattern p8 = Pattern.compile("(?<=" + senderOne + "\\s).*");
 						Matcher m8 = p8.matcher(notificationContent);
 						while (m8.find()) {
 							message = m8.group();
+							Log.i(TAG,"message set to " + message);
 						}
 					} else {
 						//it's a solo message
 						message = notificationContent;
+						Log.i(TAG,"message set to " + message);
 					}
 				}
 			}
