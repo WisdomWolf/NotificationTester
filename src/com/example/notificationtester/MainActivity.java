@@ -243,7 +243,7 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
 					Log.i(TAG,"senderOne set to " + senderOne);
 				}
 				 //Determine if it is from a single sender or part of a group conversation.
-				if (senderOne.matches("\\s")){
+				if (senderOne.matches(".*\\s.*")){
 					//establishing second stated sender so we can use as a delimiter for notification content extraction
 					Pattern p2 = Pattern.compile("(?<=" + senderOne + ",\\s).*?(?=(,|$))");
 					Matcher m2 = p2.matcher(tickerText);
@@ -297,7 +297,7 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
 						Log.i(TAG,"Notification Content set to " + notificationContent);
 					}
 					lastMessage = notificationContent;
-					if (senderOne.matches(",")) {
+					if (senderOne.matches(".*,.*")) {
 						//it's a group message and sender must be extracted
 						Pattern p7 = Pattern.compile("^.*(?=\\s)");
 						Matcher m7 = p7.matcher(notificationContent);
