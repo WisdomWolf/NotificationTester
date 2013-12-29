@@ -319,7 +319,7 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
 					}
 				}
 			}
-			speakableText = "New hangouts message from " + senderOne
+			speakableText = "New hangouts message from " + senderOne + "\n"
 					+ message;
 			speakOut();
 		}
