@@ -243,7 +243,7 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
 				Matcher m = firstHangoutsSender.matcher(tickerText);
 				while (m.find()){
 					senderOne = m.group();
-					Log.i(TAG,"senderOne set to " + senderOne);
+					Log.i(TAG,"senderOne46 set to " + senderOne);
 				}
 				 //Determine if it is from a single sender or part of a group conversation.
 				if (senderOne.matches(".*\\s.*")){
@@ -267,7 +267,7 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
 					Matcher m3 = p3.matcher(notificationText);
 					while (m3.find()){
 						message = m3.group();
-						Log.i(TAG,"message set to " + message);
+						Log.i(TAG,"message70 set to " + message);
 					}
 				} else {
 					//Possibly give a generic notification. No way to extract content from group convo in consolidated notification.
@@ -284,7 +284,7 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
 				Matcher m4 = p4.matcher(tickerText);
 				while (m4.find()){
 					senderOne = m4.group();
-					Log.i(TAG,"senderOne set to " + senderOne);
+					Log.i(TAG,"senderOne87 set to " + senderOne);
 				}
 				//separate out content from sender in tickerText
 				String tickerContent = "";
@@ -308,34 +308,34 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
 					if (notificationText.equals(senderOne + "\n" + tickerContent)){
 						//it's actually a solo message
 						message = tickerContent;
-						Log.i(TAG,"message set to " + message);
+						Log.i(TAG,"message11 set to " + message);
 					}
 					//its part of a message thread
 					//Determine if it's solo or group message
-					if (senderOne.matches(".*,.*")) {
+					if (senderOne.matches(".*?,.*")) {
 						//it's a group message and sender must be extracted
 						Pattern p7 = Pattern.compile("^.*(?=\\s)");
 						Matcher m7 = p7.matcher(notificationContent);
 						while (m7.find()) {
 							senderOne = m7.group() + " in group hangout";
-							Log.i(TAG,"senderOne set to " + senderOne);
+							Log.i(TAG,"senderOne21 set to " + senderOne);
 						}
 						//extracting message content
 						Pattern p8 = Pattern.compile("(?<=" + senderOne + "\\s).*");
 						Matcher m8 = p8.matcher(notificationContent);
 						while (m8.find()) {
 							message = m8.group();
-							Log.i(TAG,"message set to " + message);
+							Log.i(TAG,"message28 set to " + message);
 						}
 					} else {
 						//it's a solo sender
 						message = notificationContent;
-						Log.i(TAG,"message set to " + message);
+						Log.i(TAG,"message33 set to " + message);
 					}
 				} else {
 					//it's a solo standalone message
 					message = notificationContent;
-					Log.i(TAG,"message set to " + message);
+					Log.i(TAG,"message38 set to " + message);
 				}
 			}
 			speakableText = "New hangouts message from " + senderOne + "\n"

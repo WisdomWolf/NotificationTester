@@ -48,12 +48,12 @@ public class NLService extends NotificationListenerService {
     @Override
     public void onNotificationRemoved(StatusBarNotification sbn) {
         //most of what happens here is irrelevant
-    	Log.d(TAG,"********** onNotificationRemoved");
-        Log.i(TAG,"ID :" + sbn.getId() + "\t" + sbn.getNotification().tickerText +"\t" + sbn.getPackageName());
-        Intent i = new  Intent("com.example.notificationlistener.NOTIFICATION_LISTENER_EXAMPLE");
-        i.putExtra("notification_event","onNotificationRemoved :" + sbn.getPackageName() + "\n");
-        i.putExtra("broadcasting_method", "onRemoved");
-        sendBroadcast(i);
+//    	Log.d(TAG,"********** onNotificationRemoved");
+//        Log.i(TAG,"ID :" + sbn.getId() + "\t" + sbn.getNotification().tickerText +"\t" + sbn.getPackageName());
+//        Intent i = new  Intent("com.example.notificationlistener.NOTIFICATION_LISTENER_EXAMPLE");
+//        i.putExtra("notification_event","onNotificationRemoved :" + sbn.getPackageName() + "\n");
+//        i.putExtra("broadcasting_method", "onRemoved");
+//        sendBroadcast(i);
         
     }
     
@@ -113,7 +113,7 @@ public class NLService extends NotificationListenerService {
         			 sendBroadcast(i2);
 
         		 } else if(intent.getStringExtra("command").equals("clearall")){
-                     NLService.this.cancelAllNotifications();
+                     cancelAllNotifications();
              }
 
         	}
