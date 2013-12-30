@@ -251,13 +251,14 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
 						senderTwo = m2.group();
 						Log.i(TAG,"senderTwo set to " + senderTwo);
 					}
+					//Message content extraction changes slightly if senderTwo is a group
 					Pattern p3;
 					if (senderTwo.matches(".*,.*")) {
 						p3 = Pattern.compile("(?<=" + senderOne + "\\s\\s)[\\w\\W]*?(?=" + senderTwo + "\\s)");
 						Log.i(TAG,"Second sender is a group");
 					} else {
-						p3 = Pattern.compile("(?<=" + senderOne + ",\\s\\s)[\\w\\W]*?(?=\\s" + senderTwo + "\\s\\s)");
-						Log.i(TAG,"Solo consolidated message identified");
+						p3 = Pattern.compile("(?<=" + senderOne + "\\s\\s)[\\w\\W]*?(?=\\s" + senderTwo + "\\s\\s)");
+						Log.i(TAG,"Second sender is solo");
 					}
 					//extracting the contents of just this most recent message
 					Matcher m3 = p3.matcher(notificationText);
@@ -271,6 +272,8 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
 					speakOut();
 					return;
 				}
+				//clearing lastMessage so that new thread won't get misread
+				lastMessage = "";
 			} else {
 				//this is a standalone message or part of an ongoing convo thread
 				//identify sender/group
@@ -287,6 +290,7 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
 				while (m5.find()){
 					tickerContent = m5.group();
 				}
+				
 				//Determining if this message is standalone
 				if (tickerText.matches("\\d{2}\\snew\\smessages$") && notificationText.equals(senderOne + "\n"
 						+ tickerContent)){
@@ -298,13 +302,13 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
 					//best way to handle requires the previous message contents to use as a reference point to begin parsing from
 					//Determine if it's solo or group message
 					String notificationContent = "";
-					Pattern p6 = Pattern.compile("(?<=" + senderOne + "\\n" + lastMessage + ")" + "[\\w\\W]*");
+					Pattern p6 = Pattern.compile("(?<=" + senderOne + "\n" + lastMessage + ")" + "[\\w\\W]*");
 					Matcher m6 = p6.matcher(notificationText);
 					while (m6.find()) {
 						notificationContent = m6.group();
 						Log.i(TAG,"Notification Content set to " + notificationContent);
 					}
-					lastMessage = notificationContent;
+					lastMessage += notificationContent;
 					if (senderOne.matches(".*,.*")) {
 						//it's a group message and sender must be extracted
 						Pattern p7 = Pattern.compile("^.*(?=\\s)");
