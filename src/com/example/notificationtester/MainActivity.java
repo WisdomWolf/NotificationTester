@@ -292,12 +292,13 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
 				}
 				
 				//Determining if this message is standalone
-				if (tickerText.matches("\\d{2}\\snew\\smessages$") && notificationText.equals(senderOne + "\n"
-						+ tickerContent)){
-					//its a standalone messsage
-					message = tickerContent;
-					Log.i(TAG,"message set to " + message);
-				} else {
+				if (tickerText.matches("\\d{1,2} new messages$")) {
+					//its likely a message thread, but we need to be sure
+					if (notificationText.equals(senderOne + "\n" + tickerContent)){
+						//it's actually a solo message
+						message = tickerContent;
+						Log.i(TAG,"message set to " + message);
+					}
 					//its part of a message thread
 					//best way to handle requires the previous message contents to use as a reference point to begin parsing from
 					//Determine if it's solo or group message
@@ -325,10 +326,14 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
 							Log.i(TAG,"message set to " + message);
 						}
 					} else {
-						//it's a solo message
+						//it's a solo sender
 						message = notificationContent;
 						Log.i(TAG,"message set to " + message);
 					}
+				} else {
+					//it's a solo standalone message
+					message = tickerContent;
+					Log.i(TAG,"message set to " + message);
 				}
 			}
 			speakableText = "New hangouts message from " + senderOne + "\n"
