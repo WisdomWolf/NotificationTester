@@ -60,6 +60,9 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
 		Button btnList = (Button) findViewById(R.id.btnListNotify);
 		btnList.setText("Clear");
 		mTTS = new TextToSpeech(this,this);
+		Intent i = new Intent("com.example.notificationlistener.NOTIFICATION_LISTENER_SERVICE_EXAMPLE");
+		i.putExtra("command","cancel");
+		sendBroadcast(i);
 		
     }
 
@@ -291,6 +294,14 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
 					tickerContent = m5.group();
 				}
 				
+				String notificationContent = "";
+				Pattern p6 = Pattern.compile("(?<=" + senderOne + "\n" + lastMessage + ")" + "[\\w\\W]*");
+				Matcher m6 = p6.matcher(notificationText);
+				while (m6.find()) {
+					notificationContent = m6.group();
+					Log.i(TAG,"Notification Content set to " + notificationContent);
+				}
+				lastMessage += notificationContent;
 				//Determining if this message is standalone
 				if (tickerText.matches("\\d{1,2} new messages$")) {
 					//its likely a message thread, but we need to be sure
@@ -300,16 +311,7 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
 						Log.i(TAG,"message set to " + message);
 					}
 					//its part of a message thread
-					//best way to handle requires the previous message contents to use as a reference point to begin parsing from
 					//Determine if it's solo or group message
-					String notificationContent = "";
-					Pattern p6 = Pattern.compile("(?<=" + senderOne + "\n" + lastMessage + ")" + "[\\w\\W]*");
-					Matcher m6 = p6.matcher(notificationText);
-					while (m6.find()) {
-						notificationContent = m6.group();
-						Log.i(TAG,"Notification Content set to " + notificationContent);
-					}
-					lastMessage += notificationContent;
 					if (senderOne.matches(".*,.*")) {
 						//it's a group message and sender must be extracted
 						Pattern p7 = Pattern.compile("^.*(?=\\s)");
@@ -332,7 +334,7 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
 					}
 				} else {
 					//it's a solo standalone message
-					message = tickerContent;
+					message = notificationContent;
 					Log.i(TAG,"message set to " + message);
 				}
 			}

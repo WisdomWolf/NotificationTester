@@ -112,7 +112,10 @@ public class NLService extends NotificationListenerService {
         			 i2.putExtra("broadcasting_method", "NLService onReceive2");
         			 sendBroadcast(i2);
 
-        		 }
+        		 } else if(intent.getStringExtra("command").equals("clearall")){
+                     NLService.this.cancelAllNotifications();
+             }
+
         	}
            
 
