@@ -312,7 +312,8 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
 					}
 					//its part of a message thread
 					//Determine if it's solo or group message
-					if (senderOne.matches(".*?,.*")) {
+					//applying regex to the wrong thing, need to test against first line of notificationText
+					if (notificationText.matches("^.*?,.*//s")) {
 						//it's a group message and sender must be extracted
 						Pattern p7 = Pattern.compile("^.*(?=\\s)");
 						Matcher m7 = p7.matcher(notificationContent);
