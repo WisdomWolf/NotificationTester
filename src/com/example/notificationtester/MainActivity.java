@@ -176,6 +176,21 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
         	String titleText = "";
         	Notification noti = null;
         	
+        	if (intent.hasExtra("PendingIntent")) {
+        		final PendingIntent pi = (PendingIntent) intent.getParcelableExtra("PendingIntent");
+				mButton.setText("Launch " + pi.getClass().getSimpleName());
+				mButton.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						try {
+							pi.send();
+						} catch (CanceledException e) {
+							// TODO Auto-generated catch block
+							Log.e(TAG, "CanceledException error on pending intent");
+						}
+					}
+				});
+        	}
         	
         	if (intent.getStringExtra("notification_event") != null){
         		Log.d(TAG,"*******Received notification_event " + eventText);
@@ -190,19 +205,6 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
     				Log.d(TAG,"***parcelable received");
     				Parcelable parcel = intent.getParcelableExtra("statusbar_notification_object");
     				noti = (Notification) parcel;
-    				final PendingIntent pi = noti.contentIntent;
-    				mButton.setText("Launch " + noti.getClass().getSimpleName());
-    				mButton.setOnClickListener(new OnClickListener() {
-    					@Override
-    					public void onClick(View v) {
-    						try {
-								pi.send();
-							} catch (CanceledException e) {
-								// TODO Auto-generated catch block
-								Log.e(TAG, "CanceledException error on pending intent");
-							}
-    					}
-    				});
     				if (noti.tickerText != null){
     					tickerTextOutput = "Ticker Text: " + noti.tickerText.toString() + "\n";
     					tickerText = noti.tickerText.toString();
