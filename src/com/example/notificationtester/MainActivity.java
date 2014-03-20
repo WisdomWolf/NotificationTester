@@ -220,6 +220,7 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
 		
 		public void parseHangoutsNotification (Notification noti){
 			String tickerText = noti.tickerText.toString();
+			PendingIntent pi = noti.contentIntent;
 			String notificationText = "";
 			String senderOne = "";
 			String senderTwo = "";
