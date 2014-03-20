@@ -86,6 +86,7 @@ public class NLService extends NotificationListenerService {
         	sendBroadcast(i);
         } catch (Exception e) {
         	Log.wtf(TAG,"Broadcast failed to send.");
+        	e.printStackTrace();
         	return;
         }
     	Log.d(TAG,"Broadcast sent from notificationCapture");

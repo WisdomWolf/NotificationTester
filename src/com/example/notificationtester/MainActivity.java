@@ -12,6 +12,7 @@ import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.PendingIntent.CanceledException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -28,6 +29,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.RemoteViews;
 import android.widget.TextView;
@@ -43,6 +45,7 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
 	private TextToSpeech mTTS;
 	private String speakableText = "";
 	private String lastMessage = "";
+	private Button mButton;
 	Pattern firstHangoutsSender = Pattern.compile("(?<=:\\s).*?(?=,)");
 	
 
@@ -58,6 +61,7 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
 		buildText = (TextView) findViewById(R.id.txtViewB);
 		getBuildTime();
 		Button btnList = (Button) findViewById(R.id.btnListNotify);
+		mButton = (Button) findViewById(R.id.btnEnableService);
 		btnList.setText("Clear");
 		mTTS = new TextToSpeech(this,this);
 		Intent i = new Intent("com.example.notificationlistener.NOTIFICATION_LISTENER_SERVICE_EXAMPLE");
@@ -172,6 +176,7 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
         	String titleText = "";
         	Notification noti = null;
         	
+        	
         	if (intent.getStringExtra("notification_event") != null){
         		Log.d(TAG,"*******Received notification_event " + eventText);
         		eventText = intent.getStringExtra("notification_event");
@@ -185,6 +190,19 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
     				Log.d(TAG,"***parcelable received");
     				Parcelable parcel = intent.getParcelableExtra("statusbar_notification_object");
     				noti = (Notification) parcel;
+    				final PendingIntent pi = noti.contentIntent;
+    				mButton.setText("Launch " + noti.getClass().getSimpleName());
+    				mButton.setOnClickListener(new OnClickListener() {
+    					@Override
+    					public void onClick(View v) {
+    						try {
+								pi.send();
+							} catch (CanceledException e) {
+								// TODO Auto-generated catch block
+								Log.e(TAG, "CanceledException error on pending intent");
+							}
+    					}
+    				});
     				if (noti.tickerText != null){
     					tickerTextOutput = "Ticker Text: " + noti.tickerText.toString() + "\n";
     					tickerText = noti.tickerText.toString();
