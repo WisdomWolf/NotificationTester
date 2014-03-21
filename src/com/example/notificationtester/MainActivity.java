@@ -185,7 +185,6 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
 						try {
 							pi.send();
 						} catch (CanceledException e) {
-							// TODO Auto-generated catch block
 							Log.e(TAG, "CanceledException error on pending intent");
 						}
 					}
