@@ -1,6 +1,8 @@
 package com.example.notificationtester;
 
+import java.io.BufferedWriter;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.text.SimpleDateFormat;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -133,8 +135,12 @@ public class MainActivity extends Activity {
         	String titleText = "";
         	msgCount++;
         	//variables necessary for writing the same text that gets sent to txtView to a file
-        	String filename = "notificationOutput" + msgCount;
-        	FileOutputStream outputStream;
+//        	String filename = "notificationOutput" + msgCount;
+        	
+        	//Using a buffered writer with append for cleaner implementation
+        	String filename = "notificationOutput.txt";
+        	BufferedWriter buf;
+//        	FileOutputStream outputStream;
         	
         	if (intent.getStringExtra("notification_event") != null){
         		Log.d(TAG,"*******Received notification_event " + eventText);
@@ -172,9 +178,12 @@ public class MainActivity extends Activity {
     				txtView.setText(temp);
     				//write temp to a text file for accurate record to base pattern parses off of
     				try {
-    					outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
-    					outputStream.write(temp.getBytes());
-    					outputStream.close();
+//    					outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
+//    					outputStream.write(temp.getBytes());
+//    					outputStream.close();
+    					buf = new BufferedWriter(new FileWriter(filename, true));
+    					buf.append(temp);
+    					buf.close();
     				} catch (Exception e) {
     					e.printStackTrace();
     				}
